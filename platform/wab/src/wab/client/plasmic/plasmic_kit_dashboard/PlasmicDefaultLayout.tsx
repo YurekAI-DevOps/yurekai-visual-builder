@@ -60,7 +60,7 @@ import Icon19Icon from "./icons/PlasmicIcon__Icon19"; // plasmic-import: MHEeMLI
 import SparklessvgIcon from "../q_4_icons/icons/PlasmicIcon__Sparklessvg"; // plasmic-import: 9Z0Cu-c5J/icon
 import UsersPlussvgIcon from "../q_4_icons/icons/PlasmicIcon__UsersPlussvg"; // plasmic-import: OqMJdWElK/icon
 import HelpCirclesvgIcon from "../q_4_icons/icons/PlasmicIcon__HelpCirclesvg"; // plasmic-import: zY-2PPrFT/icon
-
+import yurekai_logo from "./images/yurekai-logo.png";
 createPlasmicElementProxy;
 
 export type PlasmicDefaultLayout__VariantMembers = {
@@ -250,9 +250,20 @@ function PlasmicDefaultLayout__RenderFunc(props: {
             )}
             href={"/"}
           >
-            <MarkFullColorIcon
+            {/*
+
+            Original Plasmic Code
+              <MarkFullColorIcon
               data-plasmic-name={"headerLogo"}
               data-plasmic-override={overrides.headerLogo}
+              className={classNames(projectcss.all, sty.headerLogo)}
+              role={"img"}
+            /> */}
+            <MarkFullColorIcon
+              data-plasmic-name={"headerLogo"}
+              data-plasmic-override={{
+                render: () => <img src={yurekai_logo} height="50" width="50" />,
+              }}
               className={classNames(projectcss.all, sty.headerLogo)}
               role={"img"}
             />

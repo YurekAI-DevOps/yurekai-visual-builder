@@ -10,6 +10,7 @@
   "scripts": {
     "postinstall": "patch-package",
     "dev": "bash tools/dev.bash",
+    "dev:no-watcher": "bash tools/dev-without-watcher.bash",
     "dev:screens": "bash tools/start.bash",
     "dev:frontend": "wait-on http://localhost:3004 && PORT=3003 yarn start",
     "dev:frontend:prodbuild": "wait-on http://localhost:3004 && PORT=3003 bash tools/dev-server.bash build && yarn dev:frontend:proxy",

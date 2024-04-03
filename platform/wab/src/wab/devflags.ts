@@ -576,8 +576,8 @@ const DEFAULT_DEVFLAGS = {
   logToConsole: false,
 
   // github settings
-  githubClientId: "Iv1.8a4a47b0b0d4bf88",
-  githubAppName: "plasmic-app",
+  githubClientId: "Iv1.b7b8546c2056c529",
+  githubAppName: "Local Website Builder",
 
   // change simplified defaults
   simplifiedLayout: false,

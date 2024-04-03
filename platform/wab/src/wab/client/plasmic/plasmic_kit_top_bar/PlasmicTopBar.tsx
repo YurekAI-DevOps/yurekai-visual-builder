@@ -68,6 +68,7 @@ import IconIcon from "./icons/PlasmicIcon__Icon"; // plasmic-import: jnoWwmZ86t/
 import ChevronDownsvgIcon from "../q_4_icons/icons/PlasmicIcon__ChevronDownsvg"; // plasmic-import: xZrB9_0ir/icon
 import ArrowLeftsvgIcon from "../q_4_icons/icons/PlasmicIcon__ArrowLeftsvg"; // plasmic-import: -d8Kjj4sp/icon
 import imageAy93RhuWbc from "./images/image.svg"; // plasmic-import: ay93RhuWbc/picture
+import yurekai_logo from "./images/yurekai-logo.png"; // plasmic-import: yurekai_svg/picture
 
 export type PlasmicTopBar__VariantMembers = {
   mode: "preview";
@@ -293,20 +294,35 @@ function PlasmicTopBar__RenderFunc(props: {
                 }
               )}
             >
-              <p.PlasmicIcon
-                PlasmicIconType={
-                  triggers.hover_4303647 ? MarkFullColorIcon : MarkIcon
-                }
-                className={classNames(projectcss.all, sty.svg__jQrU5, {
-                  [sty.svgmode_preview__jQrU5QMfAz]: hasVariant(
-                    $state,
-                    "mode",
-                    "preview"
+              <MarkFullColorIcon
+                data-plasmic-name={"headerLogo"}
+                data-plasmic-override={{
+                  render: () => (
+                    <img src={yurekai_logo} height="50" width="50" />
                   ),
-                })}
+                }}
+                className={classNames(projectcss.all, sty.headerLogo)}
                 role={"img"}
-                data-plasmic-trigger-props={[triggerN4303647HoverProps]}
               />
+
+              {/*
+                  ----- Plasmic Original Code -----
+
+                  <p.PlasmicIcon
+                    PlasmicIconType={
+                      MarkFullColorIcon // triggers.hover_4303647 ? MarkFullColorIcon : MarkIcon
+                    }
+                    className={classNames(projectcss.all, sty.svg__jQrU5, {
+                      [sty.svgmode_preview__jQrU5QMfAz]: hasVariant(
+                        $state,
+                        "mode",
+                        "preview"
+                      ),
+                    })}
+                    role={"img"}
+                    data-plasmic-trigger-props={[triggerN4303647HoverProps]}
+                  />
+                */}
             </a>
           </div>
         ) : null}
