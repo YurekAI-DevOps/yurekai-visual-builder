@@ -3,10 +3,9 @@ import { U } from "@/wab/client/cli-routes";
 import { useAppAuthPubConfig } from "@/wab/client/components/app-auth/app-auth-contexts";
 import { GoogleSignInButton } from "@/wab/client/components/auth/ConnectOAuth";
 import { LinkButton, Spinner } from "@/wab/client/components/widgets";
-import { Icon } from "@/wab/client/components/widgets/Icon";
 import { useAppCtx } from "@/wab/client/contexts/AppContexts";
-import MarkFullColorIcon from "@/wab/client/plasmic/plasmic_kit_design_system/PlasmicIcon__MarkFullColor";
 import { trackEvent } from "@/wab/client/tracking";
+import YurekaiLogo from "@/wab/commons/images/yurekai-logo.png";
 import { ApiUser } from "@/wab/shared/ApiSchema";
 import { getPublicUrl } from "@/wab/urls";
 import { Button, Divider, Input, notification, Spin, Tooltip } from "antd";
@@ -16,6 +15,7 @@ import { useLocation } from "react-router";
 import { Feedback, FormFeedback, useAuthForm } from "./AuthForm";
 import { useEmailVerification } from "./EmailVerification";
 import { IntakeFlowForm } from "./IntakeFlowForm";
+
 const LazyPasswordStrengthBar = React.lazy(
   () => import("@/wab/client/components/PasswordStrengthBar")
 );
@@ -412,8 +412,9 @@ export function AppEmailVerification(props: {
     <div className={"LoginForm__Container"}>
       <div className={"LoginForm__Content"}>
         <div className={"LoginForm__Logo"}>
-          <Tooltip title="Plasmic">
-            <Icon icon={MarkFullColorIcon} style={{ width: 128, height: 64 }} />
+          <Tooltip title="Yurekai">
+            <img src={YurekaiLogo} style={{ width: 128, height: 64 }} />
+            {/* <Icon icon={MarkFullColorIcon} style={{ width: 128, height: 64 }} /> */}
           </Tooltip>
         </div>
         <div className={"LoginForm__Controls"}>

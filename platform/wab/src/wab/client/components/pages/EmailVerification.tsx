@@ -1,10 +1,9 @@
 import { useNonAuthCtx } from "@/wab/client/app-ctx";
 import { isPlasmicPath, U } from "@/wab/client/cli-routes";
 import { LinkButton } from "@/wab/client/components/widgets";
-import { Icon } from "@/wab/client/components/widgets/Icon";
 import { useAppCtx } from "@/wab/client/contexts/AppContexts";
-import MarkFullColorIcon from "@/wab/client/plasmic/plasmic_kit_design_system/PlasmicIcon__MarkFullColor";
 import { spawn } from "@/wab/common";
+import YurekaiLogo from "@/wab/commons/images/yurekai-logo.png";
 import { ApiUser, ConfirmEmailResponse } from "@/wab/shared/ApiSchema";
 import { Button, notification, Spin, Tooltip } from "antd";
 import * as React from "react";
@@ -81,7 +80,8 @@ export function EmailVerification(props: EmailVerificationProps) {
       <div className={"LoginForm__Content"}>
         <div className={"LoginForm__Logo"}>
           <Tooltip title="Plasmic">
-            <Icon icon={MarkFullColorIcon} style={{ width: 128, height: 64 }} />
+            {/* <Icon icon={MarkFullColorIcon} style={{ width: 128, height: 64 }} /> */}
+            <img src={YurekaiLogo} style={{ width: 128, height: 64 }} />
           </Tooltip>
         </div>
         <div className={"LoginForm__Controls"}>

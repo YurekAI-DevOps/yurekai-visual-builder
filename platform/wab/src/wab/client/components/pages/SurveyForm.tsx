@@ -1,7 +1,6 @@
 import { isPlasmicPath, U } from "@/wab/client/cli-routes";
-import { Icon } from "@/wab/client/components/widgets/Icon";
 import { useAppCtx } from "@/wab/client/contexts/AppContexts";
-import MarkFullColorIcon from "@/wab/client/plasmic/plasmic_kit_design_system/PlasmicIcon__MarkFullColor";
+import YurekaiLogo from "@/wab/commons/images/yurekai-logo.png";
 import { SurveyRequest } from "@/wab/shared/ApiSchema";
 import { AutoComplete, Button, Form, Tooltip } from "antd";
 import * as React from "react";
@@ -64,8 +63,8 @@ export function SurveyForm() {
     <div className={"LoginForm__Container"}>
       <div className={"LoginForm__Content"}>
         <div className={"LoginForm__Logo"}>
-          <Tooltip title="Plasmic">
-            <Icon icon={MarkFullColorIcon} style={{ width: 128, height: 64 }} />
+          <Tooltip title="Yurekai">
+            <img src={YurekaiLogo} style={{ width: 128, height: 64 }} />
           </Tooltip>
         </div>
         <div className={"LoginForm__Controls"}>
@@ -76,7 +75,7 @@ export function SurveyForm() {
             onFinish={onSubmit}
             className={"SurveyForm__Fields"}
           >
-            <h2>Welcome to Plasmic!</h2>
+            <h2>Welcome to Yurekai Visual Builder!</h2>
             <Form.Item
               label={<Label>How did you hear about us?</Label>}
               name={"source"}

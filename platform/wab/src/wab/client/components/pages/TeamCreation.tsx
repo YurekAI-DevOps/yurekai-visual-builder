@@ -1,10 +1,9 @@
 import { isPlasmicPath, U } from "@/wab/client/cli-routes";
 import { maybeShowPaywall } from "@/wab/client/components/modals/PricingModal";
-import { Icon } from "@/wab/client/components/widgets/Icon";
 import { getTeamInviteLink } from "@/wab/client/components/widgets/plasmic/ShareDialogContent";
 import { useAppCtx } from "@/wab/client/contexts/AppContexts";
-import MarkFullColorIcon from "@/wab/client/plasmic/plasmic_kit_design_system/PlasmicIcon__MarkFullColor";
 import { ensure, isValidEmail, spawn } from "@/wab/common";
+import YurekaiLogo from "@/wab/commons/images/yurekai-logo.png";
 import { ApiTeam, Grant } from "@/wab/shared/ApiSchema";
 import { Button, Form, Input, notification, Select, Tooltip } from "antd";
 import copy from "copy-to-clipboard";
@@ -112,8 +111,9 @@ export function TeamCreation() {
     <div className={"LoginForm__Container"}>
       <div className={"LoginForm__Content"}>
         <div className={"LoginForm__Logo"}>
-          <Tooltip title="Plasmic">
-            <Icon icon={MarkFullColorIcon} style={{ width: 128, height: 64 }} />
+          <Tooltip title="Yurekai">
+            <img src={YurekaiLogo} style={{ width: 128, height: 64 }} />
+            {/* <Icon icon={YurekaiLogo} style={{ width: 128, height: 64 }} /> */}
           </Tooltip>
         </div>
         <div className={"LoginForm__Controls"}>
