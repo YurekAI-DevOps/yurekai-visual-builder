@@ -632,7 +632,7 @@ function PlasmicDefaultLayout__RenderFunc(props: {
               >
                 {"New organization"}
               </NavButton>
-              <NavButton
+              {/* <NavButton
                 data-plasmic-name={"helpButton"}
                 data-plasmic-override={overrides.helpButton}
                 className={classNames("__wab_instance", sty.helpButton, {
@@ -658,7 +658,7 @@ function PlasmicDefaultLayout__RenderFunc(props: {
                 target={"_blank"}
               >
                 {"Help"}
-              </NavButton>
+              </NavButton> */}
               <NavButton
                 data-plasmic-name={"userButton"}
                 data-plasmic-override={overrides.userButton}
