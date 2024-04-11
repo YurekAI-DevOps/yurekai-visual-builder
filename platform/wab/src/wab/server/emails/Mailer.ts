@@ -5,14 +5,21 @@ export class Mailer {
   constructor(private transporter: Transporter) {}
   async sendMail(mailOptions: Mail.Options): Promise<SentMessageInfo> {
     mailOptions.from = process.env.NODE_MAILER_FROM;
-    mailOptions.subject = mailOptions.subject.replace(
-      /Plasmic/gim,
-      "Builder YurekAI"
-    );
-    mailOptions.html = mailOptions.html.replace(
-      /Plasmic/gim,
-      "Builder YurekAI"
-    );
+
+    if (typeof mailOptions.subject === "string") {
+      mailOptions.subject = mailOptions.subject.replace(
+        /Plasmic/gim,
+        "Builder YurekAI"
+      );
+    }
+
+    if (typeof mailOptions.html === "string") {
+      mailOptions.html = mailOptions.html.replace(
+        /Plasmic/gim,
+        "Builder YurekAI"
+      );
+    }
+
     console.log(`SENDING MAIL`, mailOptions);
     return this.transporter.sendMail(mailOptions);
   }
