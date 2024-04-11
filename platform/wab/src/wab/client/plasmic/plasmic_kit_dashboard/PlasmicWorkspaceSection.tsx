@@ -708,7 +708,7 @@ function PlasmicWorkspaceSection__RenderFunc(props: {
               }),
             })}
           </div>
-          {(
+          {/* {(
             hasVariant($state, "canUseCmsAndDataSources", "dataSources")
               ? true
               : false
@@ -760,7 +760,7 @@ function PlasmicWorkspaceSection__RenderFunc(props: {
                 {"New CMS"}
               </Button>
             </div>
-          ) : null}
+          ) : null} */}
           {(
             hasVariant($state, "canUseCmsAndDataSources", "dataSources")
               ? false
@@ -826,7 +826,7 @@ function PlasmicWorkspaceSection__RenderFunc(props: {
             />
           ) : null}
         </p.Stack>
-        {(hasVariant($state, "canUseCms", "canUseCms") ? true : false) ? (
+        {/* {(hasVariant($state, "canUseCms", "canUseCms") ? true : false) ? (
           <div
             data-plasmic-name={"cmsSection"}
             data-plasmic-override={overrides.cmsSection}
@@ -939,7 +939,7 @@ function PlasmicWorkspaceSection__RenderFunc(props: {
               })}
             </p.Stack>
           </div>
-        ) : null}
+        ) : null} */}
       </div>
     </div>
   ) as React.ReactElement | null;
