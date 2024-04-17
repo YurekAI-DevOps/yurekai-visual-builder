@@ -345,7 +345,7 @@ function PlasmicDefaultLayout__RenderFunc(props: {
                 </div>
               </Button>
             </div>
-            <NavButton
+            {/* <NavButton
               data-plasmic-name={"upgradeButton"}
               data-plasmic-override={overrides.upgradeButton}
               bold={true}
@@ -376,7 +376,7 @@ function PlasmicDefaultLayout__RenderFunc(props: {
                   ? true
                   : undefined
               }
-            />
+            /> */}
           </p.Stack>
         </div>
       </header>
