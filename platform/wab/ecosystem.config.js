@@ -1,3 +1,7 @@
+const path = require("path");
+
+require("dotenv").config({ path: path.join(__dirname, ".env") });
+
 const BACKEND_ONLY = process.env["PM2_BACKEND_ONLY"];
 const WITH_HOSTING = process.env["PM2_WITH_HOSTING"];
 const WITH_DEDICATED_CODEGEN = process.env["PM2_WITH_DEDICATED_CODEGEN"];
