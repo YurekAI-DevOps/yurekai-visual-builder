@@ -36,7 +36,7 @@ export function showError(
       return {
         title: "Temporarily disconnected",
         description:
-          "Your browser is disconnected from Plasmic. Saving is paused, and will resume soon!",
+          "Your browser is disconnected from Builder YurekAI. Saving is paused, and will resume soon!",
         type: type ?? ("warning" as const),
       };
     } else {

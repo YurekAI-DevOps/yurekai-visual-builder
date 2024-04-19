@@ -5,7 +5,7 @@ import { GoogleSignInButton } from "@/wab/client/components/auth/ConnectOAuth";
 import { LinkButton, Spinner } from "@/wab/client/components/widgets";
 import { useAppCtx } from "@/wab/client/contexts/AppContexts";
 import { trackEvent } from "@/wab/client/tracking";
-import YurekaiLogo from "@/wab/commons/images/yurekai-logo.png";
+import YurekaiLogo from "@/wab/commons/images/yurekai-logo-2.png";
 import { ApiUser } from "@/wab/shared/ApiSchema";
 import { getPublicUrl } from "@/wab/urls";
 import { Button, Divider, Input, notification, Spin, Tooltip } from "antd";
@@ -413,7 +413,7 @@ export function AppEmailVerification(props: {
       <div className={"LoginForm__Content"}>
         <div className={"LoginForm__Logo"}>
           <Tooltip title="Yurekai">
-            <img src={YurekaiLogo} style={{ width: 128, height: 64 }} />
+            <img src={YurekaiLogo} />
             {/* <Icon icon={MarkFullColorIcon} style={{ width: 128, height: 64 }} /> */}
           </Tooltip>
         </div>

@@ -26,7 +26,7 @@ function generateShareEmail({
 }: ShareEmailProps) {
   return `${fullName(
     sharer
-  )} is using Plasmic and has invited you to the ${resourceType} "${resourceName}":
+  )} is using Builder YurekAI and has invited you to the ${resourceType} "${resourceName}":
 
 ${resourceUrl}
 
@@ -34,13 +34,11 @@ ${
   isInviteeExistingUser
     ? ""
     : `
--
+    -
 
-Plasmic is a visual website and application builder.
+    Builder YurekAI is a visual website and application builder.
 
-Learn more at:
-
-https://www.plasmic.app`.trim()
+    `.trim()
 }`;
 }
 
@@ -137,29 +135,25 @@ export async function sendWelcomeEmail(
   );
 
   const welcomeEmailBody = `
-  <p><strong>Thanks for signing up for Plasmic!</strong></p>
+  <p><strong>Thanks for signing up for Builder YurekAI!</strong></p>
 
   ${
     token
-      ? `<p>To start using Plasmic, just click in the link below</p>
+      ? `<p>To start using Builder YurekAI, just click in the link below</p>
     <a href="${emailVerificationLink}">${emailVerificationLink}</a>`
       : ""
   }
 
-  <p>You're invited to join us on Slack - we want to hear all your questions/feedback:</p>
+  <p>We're excited to see what you build with Builder YurekAI!</p>
 
-  <p><a href="https://plasmic.app/slack">https://plasmic.app/slack</a></p>
-
-  <p>We're excited to see what you build with Plasmic!</p>
-
-  <p>- The Plasmic team</p>
+  <p>- The Builder YurekAI team</p>
   `;
 
   await req.mailer.sendMail({
     from: req.config.mailFrom,
     to: email,
     bcc: req.config.mailBcc,
-    subject: `Welcome to Plasmic`,
+    subject: `Welcome to Builder YurekAI`,
     html: welcomeEmailBody,
   });
 }
@@ -169,24 +163,20 @@ export async function sendInviteEmail(req: Request, email: string) {
     from: req.config.mailFrom,
     to: email,
     bcc: req.config.mailBcc,
-    subject: `You're invited to Plasmic!`,
-    text: `Hello from the Plasmic team!
+    subject: `You're invited to Builder YurekAI!`,
+    text: `Hello from the Builder YurekAI team!
 
-You're invited to Plasmic's beta program.
+You're invited to Builder YurekAI's beta program.
 
 Get started by creating your account here:
 
-https://studio.plasmic.app
+https://builder.yurekai.com
 
 Please sign up with the email ${email} (or let us know if you prefer a different email).
 
-Join us on Slack as well:
-
-https://plasmic.app/slack
-
 We look forward to having you!
 
-- The Plasmic team
+- The Builder YurekAI team
 `,
   });
 }
@@ -269,9 +259,9 @@ export async function sendEmailVerificationToUser(
     from: req.config.mailFrom,
     to: email,
     bcc: req.config.mailBcc,
-    subject: `Verify your email address for ${appName ?? "Plasmic"}`,
+    subject: `Verify your email address for ${appName ?? "Builder YurekAI"}`,
     html: PLASMIC_EMAIL_VERIFICATION_HTML(
-      appName ?? "Plasmic",
+      appName ?? "Builder YurekAI",
       emailVerificationLink
     ),
   });
