@@ -5,7 +5,7 @@ import { GoogleSignInButton } from "@/wab/client/components/auth/ConnectOAuth";
 import { LinkButton, Spinner } from "@/wab/client/components/widgets";
 import { useAppCtx } from "@/wab/client/contexts/AppContexts";
 import { trackEvent } from "@/wab/client/tracking";
-import YurekaiLogo from "@/wab/commons/images/yurekai-logo-2.png";
+import YurekaiLogo from "@/wab/commons/images/yurekai-builder-logo.png";
 import { ApiUser } from "@/wab/shared/ApiSchema";
 import { getPublicUrl } from "@/wab/urls";
 import { Button, Divider, Input, notification, Spin, Tooltip } from "antd";
