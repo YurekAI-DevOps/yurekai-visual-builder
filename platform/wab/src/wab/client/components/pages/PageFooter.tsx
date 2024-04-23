@@ -13,7 +13,7 @@ export function PageFooter() {
     switch (domain) {
       case "builder.yurekai.com":
         return (
-          <div style="text-align:center;">
+          <div style={{textAlign: 'center'}}>
             <div
               className={"LoginForm__FooterCopy"}
               style={{ marginTop: "2px", textAlign: "center" }}
@@ -40,7 +40,7 @@ export function PageFooter() {
         );
       case "builder.newyurekai.com":
         return (
-          <div style="text-align:center;">
+          <div style={{textAlign: 'center'}}>
             <div
               className={"LoginForm__FooterCopy"}
               style={{ marginTop: "2px", textAlign: "center" }}
@@ -67,7 +67,7 @@ export function PageFooter() {
         );
       case "builder.swissyurekai.com":
         return (
-          <div style="text-align:center;">
+          <div style={{textAlign: 'center'}}>
             <div
               className={"LoginForm__FooterCopy"}
               style={{ marginTop: "2px", textAlign: "center" }}
