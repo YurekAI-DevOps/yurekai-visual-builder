@@ -13,12 +13,12 @@ export function PageFooter() {
     switch (domain) {
       case "builder.yurekai.com":
         return (
-          <div>
+          <div style="text-align:center;">
             <div
               className={"LoginForm__FooterCopy"}
               style={{ marginTop: "2px", textAlign: "center" }}
             >
-              © {getCurrentYear()} YurekAI for real estate - Powered by
+              © {getCurrentYear()} YurekAI for real estate - Powered by &nbsp;
               <a href="https://www.yurekai.com" style={{ color: "#1e73be" }}>
                 YurekAI technologies
               </a>
@@ -27,7 +27,7 @@ export function PageFooter() {
               className={"LoginForm__FooterCopy"}
               style={{ marginTop: "2px" }}
             >
-              <p>YurekAI S.r.l. - Via Jervis 77, 10015 Ivrea, TO - Italy</p>
+              <p>YurekAI S.r.l. - Corso Svizzera 185, 10149 Torino, TO Italy PI/CF 12459940016 - REA TO-1293220</p>
               <a
                 href="https://labs.yurekai.com"
                 style={{ color: "rgba(0, 0, 0, 0.87)", textDecoration: "none" }}
@@ -40,12 +40,12 @@ export function PageFooter() {
         );
       case "builder.newyurekai.com":
         return (
-          <div>
+          <div style="text-align:center;">
             <div
               className={"LoginForm__FooterCopy"}
               style={{ marginTop: "2px", textAlign: "center" }}
             >
-              © {getCurrentYear()} YurekAI for real estate - Powered by
+              © {getCurrentYear()} YurekAI for real estate - Powered by &nbsp;
               <a href="https://www.yurekai.com" style={{ color: "#1e73be" }}>
                 YurekAI technologies
               </a>
@@ -67,12 +67,12 @@ export function PageFooter() {
         );
       case "builder.swissyurekai.com":
         return (
-          <div>
+          <div style="text-align:center;">
             <div
               className={"LoginForm__FooterCopy"}
               style={{ marginTop: "2px", textAlign: "center" }}
             >
-              © {getCurrentYear()} YurekAI for real estate - Powered by
+              © {getCurrentYear()} YurekAI for real estate - Powered by &nbsp;
               <a href="https://www.yurekai.com" style={{ color: "#1e73be" }}>
                 YurekAI technologies
               </a>
