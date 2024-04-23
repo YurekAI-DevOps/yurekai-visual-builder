@@ -64,7 +64,7 @@ export function SurveyForm() {
       <div className={"LoginForm__Content"}>
         <div className={"LoginForm__Logo"}>
           <Tooltip title="Yurekai">
-            <img src={YurekaiLogo} style={{ width: 128, height: 64 }} />
+            <img src={YurekaiLogo} style={{ width: 300, height: 110 }} />
           </Tooltip>
         </div>
         <div className={"LoginForm__Controls"}>

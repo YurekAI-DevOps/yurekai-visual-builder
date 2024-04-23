@@ -10,7 +10,7 @@ export function IntakeFlowForm(props: { children: ReactNode }) {
       <div className={"LoginForm__Content"}>
         <div className={"LoginForm__Logo"}>
           <Tooltip title="Yurekai">
-            <img src={YurekaiLogo} style={{ width: 128, height: 64 }} />
+            <img src={YurekaiLogo} style={{ width: 300, height: 110 }} />
             {/* <Icon icon={MarkFullColorIcon} style={{ width: 128, height: 64 }} /> */}
           </Tooltip>
         </div>

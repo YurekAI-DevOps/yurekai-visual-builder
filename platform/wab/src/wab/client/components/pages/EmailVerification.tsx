@@ -81,7 +81,7 @@ export function EmailVerification(props: EmailVerificationProps) {
         <div className={"LoginForm__Logo"}>
           <Tooltip title="Plasmic">
             {/* <Icon icon={MarkFullColorIcon} style={{ width: 128, height: 64 }} /> */}
-            <img src={YurekaiLogo} style={{ width: 128, height: 64 }} />
+            <img src={YurekaiLogo} style={{ width: 300, height: 110 }} />
           </Tooltip>
         </div>
         <div className={"LoginForm__Controls"}>
