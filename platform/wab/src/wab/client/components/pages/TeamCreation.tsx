@@ -3,7 +3,7 @@ import { maybeShowPaywall } from "@/wab/client/components/modals/PricingModal";
 import { getTeamInviteLink } from "@/wab/client/components/widgets/plasmic/ShareDialogContent";
 import { useAppCtx } from "@/wab/client/contexts/AppContexts";
 import { ensure, isValidEmail, spawn } from "@/wab/common";
-import YurekaiLogo from "@/wab/commons/images/yurekai-logo.png";
+import YurekaiLogo from "@/wab/commons/images/yurekai-builder-logo.png";
 import { ApiTeam, Grant } from "@/wab/shared/ApiSchema";
 import { Button, Form, Input, notification, Select, Tooltip } from "antd";
 import copy from "copy-to-clipboard";

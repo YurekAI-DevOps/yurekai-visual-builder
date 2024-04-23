@@ -1,4 +1,4 @@
-import YurekaiLogo from "@/wab/commons/images/yurekai-logo.png";
+import YurekaiLogo from "@/wab/commons/images/yurekai-builder-logo.png";
 import { Tooltip } from "antd";
 import * as React from "react";
 import { ReactNode } from "react";

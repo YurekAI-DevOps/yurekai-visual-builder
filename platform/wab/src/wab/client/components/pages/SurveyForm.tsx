@@ -1,6 +1,6 @@
 import { isPlasmicPath, U } from "@/wab/client/cli-routes";
 import { useAppCtx } from "@/wab/client/contexts/AppContexts";
-import YurekaiLogo from "@/wab/commons/images/yurekai-logo.png";
+import YurekaiLogo from "@/wab/commons/images/yurekai-builder-logo.png";
 import { SurveyRequest } from "@/wab/shared/ApiSchema";
 import { AutoComplete, Button, Form, Tooltip } from "antd";
 import * as React from "react";

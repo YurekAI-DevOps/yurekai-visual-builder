@@ -239,8 +239,8 @@ export class RouteSet {
   plasmicInit = new R("/auth/plasmic-init/:initToken");
   currentUser = new R("/api/v1/auth/self");
   userSettings = new R("/self/settings");
-  privacy = new R("https://www.plasmic.app/privacy", { noCompile: true });
-  tos = new R("https://www.plasmic.app/tos", { noCompile: true });
+  privacy = new R("https://www.iubenda.com/privacy-policy/50594906/full-legal", { noCompile: true });
+  tos = new R("https://www.iubenda.com/termini-e-condizioni/50594906", { noCompile: true });
   survey = new R("/survey");
   emailVerification = new R("/email-verification");
   teamCreation = new R("/team-creation");

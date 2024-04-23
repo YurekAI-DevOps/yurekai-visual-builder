@@ -3,7 +3,7 @@ import { isPlasmicPath, U } from "@/wab/client/cli-routes";
 import { LinkButton } from "@/wab/client/components/widgets";
 import { useAppCtx } from "@/wab/client/contexts/AppContexts";
 import { spawn } from "@/wab/common";
-import YurekaiLogo from "@/wab/commons/images/yurekai-logo.png";
+import YurekaiLogo from "@/wab/commons/images/yurekai-builder-logo.png";
 import { ApiUser, ConfirmEmailResponse } from "@/wab/shared/ApiSchema";
 import { Button, notification, Spin, Tooltip } from "antd";
 import * as React from "react";
