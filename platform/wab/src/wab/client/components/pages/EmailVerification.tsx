@@ -79,7 +79,7 @@ export function EmailVerification(props: EmailVerificationProps) {
     <div className={"LoginForm__Container"}>
       <div className={"LoginForm__Content"}>
         <div className={"LoginForm__Logo"}>
-          <Tooltip title="Plasmic">
+          <Tooltip title="YurekAI">
             {/* <Icon icon={MarkFullColorIcon} style={{ width: 128, height: 64 }} /> */}
             <img src={YurekaiLogo} style={{ width: 300, height: 110 }} />
           </Tooltip>
@@ -90,7 +90,7 @@ export function EmailVerification(props: EmailVerificationProps) {
               <h2>Thanks for verifying your email</h2>
               <p>
                 Now we know it's you, you can start getting the best out of
-                Plasmic.
+                YurakAI.
               </p>
               <Button
                 type={"primary"}
@@ -141,7 +141,7 @@ export function EmailVerification(props: EmailVerificationProps) {
             <div>
               <h2>Verify your email address!</h2>
               <p>
-                To use Plasmic, click the verification link in the email we sent
+                To use YurekAI, click the verification link in the email we sent
                 to <strong>{selfInfo.email}</strong>. This helps keep your
                 account secure.
               </p>

@@ -412,7 +412,7 @@ export function AppEmailVerification(props: {
     <div className={"LoginForm__Container"}>
       <div className={"LoginForm__Content"}>
         <div className={"LoginForm__Logo"}>
-          <Tooltip title="Yurekai">
+          <Tooltip title="YurekAI">
             <img src={YurekaiLogo} />
             {/* <Icon icon={MarkFullColorIcon} style={{ width: 128, height: 64 }} /> */}
           </Tooltip>

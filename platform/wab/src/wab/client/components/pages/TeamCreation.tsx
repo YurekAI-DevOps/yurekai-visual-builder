@@ -111,7 +111,7 @@ export function TeamCreation() {
     <div className={"LoginForm__Container"}>
       <div className={"LoginForm__Content"}>
         <div className={"LoginForm__Logo"}>
-          <Tooltip title="Yurekai">
+          <Tooltip title="YurekAI">
             <img src={YurekaiLogo} style={{ width: 300, height: 110 }} />
             {/* <Icon icon={YurekaiLogo} style={{ width: 128, height: 64 }} /> */}
           </Tooltip>
