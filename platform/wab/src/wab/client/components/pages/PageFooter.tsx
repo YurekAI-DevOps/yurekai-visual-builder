@@ -11,7 +11,7 @@ export function PageFooter() {
 
     // Define copyright text based on domain
     switch (domain) {
-      case "yurekai.com":
+      case "builder.yurekai.com":
         return `<div className={"LoginForm__FooterCopy"} style="margin-top:2px; text-align: center;">
           © ${getCurrentYear()} YurekAI for real estate - Powered by
           <a href="https://www.yurekai.com" style="color: #1e73be;">YurekAI technologies</a>
@@ -22,7 +22,7 @@ export function PageFooter() {
               <b>Proudly made with ❤️ in the YurekAI's Labs 🧪</b>
           </a>
         </div>`;
-      case "newyurekai.com":
+      case "builder.newyurekai.com":
         return `<div className={"LoginForm__FooterCopy"} style="margin-top:2px; text-align: center;">
           © ${getCurrentYear()} YurekAI for real estate - Powered by
           <a href="https://www.yurekai.com" style="color: #1e73be;">YurekAI technologies</a>
@@ -34,7 +34,7 @@ export function PageFooter() {
               <b>Proudly made with ❤️ in the YurekAI's Labs 🧪</b>
           </a>
         </div>`;
-      case "swissyurekai.com":
+      case "builder.swissyurekai.com":
         return `<div className={"LoginForm__FooterCopy"} style="margin-top:2px; text-align: center;">
           © ${getCurrentYear()} YurekAI for real estate - Powered by
           <a href="https://www.yurekai.com" style="color: #1e73be;">YurekAI technologies</a>
