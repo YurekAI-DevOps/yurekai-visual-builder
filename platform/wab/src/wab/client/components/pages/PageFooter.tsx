@@ -13,7 +13,7 @@ export function PageFooter() {
     switch (domain) {
       case "yurekai.com":
         return `<div className={"LoginForm__FooterCopy"} style="margin-top:2px; text-align: center;">
-          © ${getCurrentYear()} YurekAI for real estate - Powered by 
+          © ${getCurrentYear()} YurekAI for real estate - Powered by
           <a href="https://www.yurekai.com" style="color: #1e73be;">YurekAI technologies</a>
         </div>
         <div class="LoginForm__FooterCopy" style="margin-top: 2px;">
@@ -23,8 +23,8 @@ export function PageFooter() {
           </a>
         </div>`;
       case "newyurekai.com":
-        return return `<div className={"LoginForm__FooterCopy"} style="margin-top:2px; text-align: center;">
-          © ${getCurrentYear()} YurekAI for real estate - Powered by 
+        return `<div className={"LoginForm__FooterCopy"} style="margin-top:2px; text-align: center;">
+          © ${getCurrentYear()} YurekAI for real estate - Powered by
           <a href="https://www.yurekai.com" style="color: #1e73be;">YurekAI technologies</a>
         </div>
         <div class="LoginForm__FooterCopy" style="margin-top: 2px;">
@@ -35,8 +35,8 @@ export function PageFooter() {
           </a>
         </div>`;
       case "swissyurekai.com":
-        return return `<div className={"LoginForm__FooterCopy"} style="margin-top:2px; text-align: center;">
-          © ${getCurrentYear()} YurekAI for real estate - Powered by 
+        return `<div className={"LoginForm__FooterCopy"} style="margin-top:2px; text-align: center;">
+          © ${getCurrentYear()} YurekAI for real estate - Powered by
           <a href="https://www.yurekai.com" style="color: #1e73be;">YurekAI technologies</a>
         </div>
         <div class="LoginForm__FooterCopy" style="margin-top: 2px;">
@@ -57,7 +57,7 @@ export function PageFooter() {
         <a href={U.privacy({})}>Privacy Policy</a>
         <a href={U.tos({})}>Terms & Conditions</a>
       </div>
-      {getCopyrightHtml()}
+      {getCopyrightText()}
     </div>
   );
 }
