@@ -12,40 +12,90 @@ export function PageFooter() {
     // Define copyright text based on domain
     switch (domain) {
       case "builder.yurekai.com":
-        return `<div className={"LoginForm__FooterCopy"} style="margin-top:2px; text-align: center;">
-          © ${getCurrentYear()} YurekAI for real estate - Powered by
-          <a href="https://www.yurekai.com" style="color: #1e73be;">YurekAI technologies</a>
-        </div>
-        <div class="LoginForm__FooterCopy" style="margin-top: 2px;">
-          YurekAI S.r.l. - Via Jervis 77, 10015 Ivrea, TO - Italy<br>
-          <a href="https://labs.yurekai.com" style="color: rgba(0, 0, 0, 0.87); text-decoration: none;" target="_blank">
-              <b>Proudly made with ❤️ in the YurekAI's Labs 🧪</b>
-          </a>
-        </div>`;
+        return (
+          <div>
+            <div
+              className={"LoginForm__FooterCopy"}
+              style={{ marginTop: "2px", textAlign: "center" }}
+            >
+              © {getCurrentYear()} YurekAI for real estate - Powered by
+              <a href="https://www.yurekai.com" style={{ color: "#1e73be" }}>
+                YurekAI technologies
+              </a>
+            </div>
+            <div
+              className={"LoginForm__FooterCopy"}
+              style={{ marginTop: "2px" }}
+            >
+              <p>YurekAI S.r.l. - Via Jervis 77, 10015 Ivrea, TO - Italy</p>
+              <a
+                href="https://labs.yurekai.com"
+                style={{ color: "rgba(0, 0, 0, 0.87)", textDecoration: "none" }}
+                target="_blank"
+              >
+                <b>Proudly made with ❤️ in the YurekAI's Labs 🧪</b>
+              </a>
+            </div>
+          </div>
+        );
       case "builder.newyurekai.com":
-        return `<div className={"LoginForm__FooterCopy"} style="margin-top:2px; text-align: center;">
-          © ${getCurrentYear()} YurekAI for real estate - Powered by
-          <a href="https://www.yurekai.com" style="color: #1e73be;">YurekAI technologies</a>
-        </div>
-        <div class="LoginForm__FooterCopy" style="margin-top: 2px;">
-          New YurekAI Inc. - 112 Capitol TRL, Newark, DE - USA<br>
-          EIN 93 - 3897811<br>
-          <a href="https://labs.yurekai.com" style="color: rgba(0, 0, 0, 0.87); text-decoration: none;" target="_blank">
-              <b>Proudly made with ❤️ in the YurekAI's Labs 🧪</b>
-          </a>
-        </div>`;
+        return (
+          <div>
+            <div
+              className={"LoginForm__FooterCopy"}
+              style={{ marginTop: "2px", textAlign: "center" }}
+            >
+              © {getCurrentYear()} YurekAI for real estate - Powered by
+              <a href="https://www.yurekai.com" style={{ color: "#1e73be" }}>
+                YurekAI technologies
+              </a>
+            </div>
+            <div
+              className={"LoginForm__FooterCopy"}
+              style={{ marginTop: "2px" }}
+            >
+              <p>New YurekAI Inc. - 112 Capitol TRL, Newark, DE - USA</p>
+              <a
+                href="https://labs.yurekai.com"
+                style={{ color: "rgba(0, 0, 0, 0.87)", textDecoration: "none" }}
+                target="_blank"
+              >
+                <b>Proudly made with ❤️ in the YurekAI's Labs 🧪</b>
+              </a>
+            </div>
+          </div>
+        );
       case "builder.swissyurekai.com":
-        return `<div className={"LoginForm__FooterCopy"} style="margin-top:2px; text-align: center;">
-          © ${getCurrentYear()} YurekAI for real estate - Powered by
-          <a href="https://www.yurekai.com" style="color: #1e73be;">YurekAI technologies</a>
-        </div>
-        <div class="LoginForm__FooterCopy" style="margin-top: 2px;">
-          Augmented Reality Technology AG - Via Cantonale 13 - 6900 Lugano, TI - Switzerland<br>
-          Register no CH-501.3.013.676-3 - CHE-115.192.512IVA<br>
-          <a href="https://labs.yurekai.com" style="color: rgba(0, 0, 0, 0.87); text-decoration: none;" target="_blank">
-              <b>Proudly made with ❤️ in the YurekAI's Labs 🧪</b>
-          </a>
-        </div>`;
+        return (
+          <div>
+            <div
+              className={"LoginForm__FooterCopy"}
+              style={{ marginTop: "2px", textAlign: "center" }}
+            >
+              © {getCurrentYear()} YurekAI for real estate - Powered by
+              <a href="https://www.yurekai.com" style={{ color: "#1e73be" }}>
+                YurekAI technologies
+              </a>
+            </div>
+            <div
+              className={"LoginForm__FooterCopy"}
+              style={{ marginTop: "2px" }}
+            >
+              <p>
+                Augmented Reality Technology AG - Via Cantonale 13 - 6900
+                Lugano, TI - Switzerland
+              </p>
+              <p>Register no CH-501.3.013.676-3 - CHE-115.192.512IVA</p>
+              <a
+                href="https://labs.yurekai.com"
+                style={{ color: "rgba(0, 0, 0, 0.87)", textDecoration: "none" }}
+                target="_blank"
+              >
+                <b>Proudly made with ❤️ in the YurekAI's Labs 🧪</b>
+              </a>
+            </div>
+          </div>
+        );
       default:
         return `Copyright © ${getCurrentYear()} Plasmic Inc. All rights reserved.`;
     }
