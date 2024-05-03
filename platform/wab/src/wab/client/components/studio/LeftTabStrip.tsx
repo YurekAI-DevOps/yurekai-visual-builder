@@ -2,7 +2,6 @@
 import { showTemporaryInfo } from "@/wab/client/components/quick-modals";
 import GearIcon from "@/wab/client/plasmic/plasmic_kit/PlasmicIcon__Gear";
 import MixinIcon from "@/wab/client/plasmic/plasmic_kit/PlasmicIcon__Mixin";
-import SlackIcon from "@/wab/client/plasmic/plasmic_kit/PlasmicIcon__Slack";
 import TreeIcon from "@/wab/client/plasmic/plasmic_kit/PlasmicIcon__Tree";
 import WandIcon from "@/wab/client/plasmic/plasmic_kit/PlasmicIcon__Wand";
 import KeyboardIcon from "@/wab/client/plasmic/plasmic_kit_design_system/PlasmicIcon__Keyboard";
@@ -22,7 +21,6 @@ import DotsHorizontalCirclesvgIcon from "@/wab/client/plasmic/q_4_icons/icons/Pl
 import DownloadsvgIcon from "@/wab/client/plasmic/q_4_icons/icons/PlasmicIcon__Downloadsvg";
 import FigmasvgIcon from "@/wab/client/plasmic/q_4_icons/icons/PlasmicIcon__Figmasvg";
 import HelpCirclesvgIcon from "@/wab/client/plasmic/q_4_icons/icons/PlasmicIcon__HelpCirclesvg";
-import MessagesvgIcon from "@/wab/client/plasmic/q_4_icons/icons/PlasmicIcon__Messagesvg";
 import PhotosvgIcon from "@/wab/client/plasmic/q_4_icons/icons/PlasmicIcon__Photosvg";
 import WarningTrianglesvgIcon from "@/wab/client/plasmic/q_4_icons/icons/PlasmicIcon__WarningTrianglesvg";
 import { PlayerData } from "@/wab/client/studio-ctx/multiplayer-ctx";
@@ -279,27 +277,27 @@ Help
       title: "Help",
       style: { marginTop: "auto" },
       items: {
-        docs: {
-          type: "item",
-          icon: <HelpCirclesvgIcon />,
-          label: "Documentation",
-          href: "https://plasmic.app/learn",
-          cond: !isWhiteLabelUser,
-        },
-        forum: {
-          type: "item",
-          icon: <MessagesvgIcon />,
-          label: "Forum",
-          href: "https://forum.plasmic.app/",
-          cond: !isWhiteLabelUser,
-        },
-        slack: {
-          type: "item",
-          icon: <SlackIcon />,
-          label: "Slack community",
-          href: "https://plasmic.app/slack",
-          cond: !isWhiteLabelUser,
-        },
+        // docs: {
+        //   type: "item",
+        //   icon: <HelpCirclesvgIcon />,
+        //   label: "Documentation",
+        //   href: "https://plasmic.app/learn",
+        //   cond: !isWhiteLabelUser,
+        // },
+        // forum: {
+        //   type: "item",
+        //   icon: <MessagesvgIcon />,
+        //   label: "Forum",
+        //   href: "https://forum.plasmic.app/",
+        //   cond: !isWhiteLabelUser,
+        // },
+        // slack: {
+        //   type: "item",
+        //   icon: <SlackIcon />,
+        //   label: "Slack community",
+        //   href: "https://plasmic.app/slack",
+        //   cond: !isWhiteLabelUser,
+        // },
         keyboard: {
           type: "item",
           icon: <KeyboardIcon />,

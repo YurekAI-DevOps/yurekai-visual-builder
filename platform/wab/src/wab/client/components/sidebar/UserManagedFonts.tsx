@@ -92,7 +92,7 @@ function _UserManagedFontsPanel(props: {}) {
 
   const addFontFamily = async () => {
     const newFont = await reactPrompt({
-      message: `Enter the font-family to use. Plasmic will allow you to use this font in design even if this font is not installed locally.`,
+      message: `Enter the font-family to use. Builder YurekAI will allow you to use this font in design even if this font is not installed locally.`,
       actionText: "Add",
       placeholder: "Font family...",
       defaultValue: undefined,

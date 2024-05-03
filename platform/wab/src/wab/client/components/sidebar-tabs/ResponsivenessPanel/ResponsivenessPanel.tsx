@@ -173,13 +173,13 @@ export function ResponsivenessPanel_() {
             <p>
               Breakpoints let you make pages and components look different
               depending on the screen size.{" "}
-              <a
+              {/* <a
                 href={"https://docs.plasmic.app/learn/screen-variants"}
                 target={"_blank"}
               >
                 Learn more
               </a>
-              .
+              . */}
             </p>
             <p>
               <strong>Most projects need just 1 breakpoint</strong>, to switch

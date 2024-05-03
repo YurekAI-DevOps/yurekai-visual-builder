@@ -689,14 +689,14 @@ export class StudioCtx extends WithDbCtx {
             ? getArenaName(this.currentArena)
             : undefined;
 
-          let title = `${projectName} - Plasmic`;
+          let title = `${projectName} - Builder YurekAI`;
           if (arenaName) {
             if (version && !isLatest(version)) {
-              title = `${arenaName} (${branchName}@${version}) - ${projectName} - Plasmic`;
+              title = `${arenaName} (${branchName}@${version}) - ${projectName} - Builder YurekAI`;
             } else if (branch) {
-              title = `${arenaName} (${branchName}) - ${projectName} - Plasmic`;
+              title = `${arenaName} (${branchName}) - ${projectName} - Builder YurekAI`;
             } else {
-              title = `${arenaName} - ${projectName} - Plasmic`;
+              title = `${arenaName} - ${projectName} - Builder YurekAI`;
             }
           }
           await this.appCtx.topFrameApi?.setDocumentTitle(title);

@@ -124,7 +124,7 @@ export function TopFrameChrome({
   const fullPreview = !!UU.projectFullPreview.parse(location.pathname, false);
 
   React.useEffect(() => {
-    document.title = `${project.name} - Plasmic`;
+    document.title = `${project.name} - Builder YurekAI`;
   }, [project.name]);
 
   React.useEffect(() => {
