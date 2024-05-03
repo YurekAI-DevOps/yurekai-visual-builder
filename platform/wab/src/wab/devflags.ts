@@ -278,34 +278,21 @@ const INSERT_PANEL_CONTENT: InsertPanelConfig = {
     video: "hostless-html-video",
     youtube: "hostless-youtube",
   },
+  lightModeSections: {
+    "Default components": {
+      Common: ["text", "button"],
+    },
+  },
   overrideSections: {
     website: {
       "Default components": {
-        Common: [
-          "text",
-          "section",
-          "columns",
-          "image",
-          "icon",
-          "button",
-          "form",
-        ],
+        Common: ["text"],
       },
     },
   } as Record<string, Record<string, Record<string, string[]>>>,
   builtinSections: {
     "Default components": {
-      Common: [
-        "table",
-        "text",
-        "button",
-        "input",
-        "select",
-        "image",
-        "form",
-        "section",
-        "columns",
-      ],
+      Common: ["text", "button"],
       General: ["button", "text", "heading", "link"],
       Display: [
         "table",

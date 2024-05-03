@@ -113,6 +113,7 @@ import { useMemo, useState } from "react";
 import { FocusScope, useFocusManager } from "react-aria";
 import AutoSizer from "react-virtualized-auto-sizer";
 import { areEqual, VariableSizeList } from "react-window";
+import { isCoreTeamEmail } from "src/wab/shared/devflag-utils";
 import S from "./InsertPanel.module.scss";
 
 const leftSideWidth = 200;
@@ -145,7 +146,6 @@ export const InsertPanel = observer(function InsertPanel_({
   const studioCtx = useStudioCtx();
   const [isDragging, setDragging] = React.useState(false);
   const lastUsedItemsRef = React.useRef<AddItem[]>([]);
-
   const onInsertedItem = (item: AddItem) => {
     lastUsedItemsRef.current.unshift(item);
     lastUsedItemsRef.current = L.uniqBy(lastUsedItemsRef.current, (x) => x.key);
@@ -959,6 +959,11 @@ export function buildAddItemGroups({
   insertLoc?: InsertRelLoc;
   projectDependencies: Array<ProjectDependency>;
 }): AddItemGroup[] {
+  const isAdmin = isCoreTeamEmail(
+    studioCtx.appCtx.selfInfo?.email,
+    studioCtx.appCtx.appConfig
+  );
+
   const uiConfig = studioCtx.getCurrentUiConfig();
   const hostlessComponentsInDefaultMenu = new Set<string>();
   const getInsertableTemplatesSection = (group: InsertableTemplatesGroup) => {
@@ -988,7 +993,9 @@ export function buildAddItemGroups({
   const isApp = studioCtx.siteInfo.hasAppAuth;
   const builtinSections = mergeSane(
     {},
-    DEVFLAGS.insertPanelContent.builtinSections,
+    !isAdmin
+      ? DEVFLAGS.insertPanelContent.lightModeSections
+      : DEVFLAGS.insertPanelContent.builtinSections,
     DEVFLAGS.insertPanelContent.overrideSections[isApp ? "app" : "website"]
   );
   const insertPanelConfig: InsertPanelConfig = {

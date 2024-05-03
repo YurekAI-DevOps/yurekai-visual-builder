@@ -227,6 +227,7 @@ type SectionedAliases = Record<string, Record<string, InsertAlias[]>>;
 
 export interface InsertPanelConfig {
   aliases: Partial<Record<InsertComponentAlias, string>>;
+  lightModeSections: SectionedAliases;
   builtinSections: SectionedAliases;
   overrideSections: {
     website?: SectionedAliases;

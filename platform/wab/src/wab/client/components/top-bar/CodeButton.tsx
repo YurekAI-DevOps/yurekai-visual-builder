@@ -8,11 +8,10 @@ import { spawn } from "@/wab/common";
 import { isPlasmicComponent } from "@/wab/components";
 import { toClassName } from "@/wab/shared/codegen/util";
 import { PlasmicIcon } from "@plasmicapp/react-web";
-import { Menu, Tooltip } from "antd";
+import { Menu } from "antd";
 import { defer } from "lodash";
 import { observer } from "mobx-react-lite";
 import * as React from "react";
-import { MdOpenInNew } from "react-icons/all";
 import { useLocalStorage } from "react-use";
 
 export const CodeButton = observer(function CodeButton() {
@@ -94,7 +93,7 @@ export const CodeButton = observer(function CodeButton() {
           ...props,
           menu: () => (
             <Menu>
-              <Menu.Item
+              {/* <Menu.Item
                 onClick={() => showQuickstarts()}
                 disabled={isPlasmicLevels}
               >
@@ -130,7 +129,7 @@ export const CodeButton = observer(function CodeButton() {
               >
                 Plasmic on GitHub
                 <MdOpenInNew style={{ color: "silver", marginLeft: "8px" }} />
-              </Menu.Item>
+              </Menu.Item> */}
             </Menu>
           ),
         }}
