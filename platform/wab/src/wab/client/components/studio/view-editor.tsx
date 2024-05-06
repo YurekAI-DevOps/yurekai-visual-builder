@@ -174,6 +174,7 @@ import React, { createRef } from "react";
 import { createPortal } from "react-dom";
 import ResizeObserver from "resize-observer-polyfill";
 import { SignalBinding } from "signals";
+import { isCoreTeamEmail } from "src/wab/shared/devflag-utils";
 import { CodePreviewPanel } from "./code-preview/CodePreviewPanel";
 import { FocusedModeToolbar } from "./FocusedModeToolbar/FocusedModeToolbar";
 import { GlobalCssVariables } from "./GlobalCssVariables";
@@ -377,57 +378,64 @@ class ViewEditor_ extends React.Component<ViewEditorProps, ViewEditorState> {
       }
     });
 
-    this.registerListener("copy", (e: ClipboardEvent) => {
-      trackEvent("Copy");
-      console.log("Copy event", e);
-      this.hotkey(() => {
-        if (e.clipboardData) {
-          const viewCtx = this.viewCtx();
+    if (
+      isCoreTeamEmail(
+        this.props.studioCtx.appCtx.selfInfo?.email,
+        this.props.studioCtx.appCtx.appConfig
+      )
+    ) {
+      this.registerListener("copy", (e: ClipboardEvent) => {
+        trackEvent("Copy");
+        console.log("Copy event", e);
+        this.hotkey(() => {
+          if (e.clipboardData) {
+            const viewCtx = this.viewCtx();
 
-          if (viewCtx) {
-            viewCtx.enforcePastingAsSibling = true;
+            if (viewCtx) {
+              viewCtx.enforcePastingAsSibling = true;
+            }
+
+            this.viewOps().copy();
+
+            e.clipboardData.setData(
+              "application/vnd.plasmic.clipboard+json",
+              JSON.stringify({ action: "copy" })
+            );
+            this.clipboardAction = "copy";
           }
-
-          this.viewOps().copy();
-
-          e.clipboardData.setData(
-            "application/vnd.plasmic.clipboard+json",
-            JSON.stringify({ action: "copy" })
+        })(e);
+      });
+      this.registerListener("cut", (e: ClipboardEvent) => {
+        trackEvent("Cut");
+        console.log("Cut event", e);
+        this.hotkey(async () => {
+          if (e.clipboardData) {
+            await this.viewOps().cut();
+            e.clipboardData.setData(
+              "application/vnd.plasmic.clipboard+json",
+              JSON.stringify({ action: "cut" })
+            );
+            this.clipboardAction = "cut";
+          }
+        })(e);
+      });
+      this.registerListener("paste", async (e) => {
+        trackEvent("Paste");
+        this.hotkey(async () => {
+          if (!e.clipboardData) {
+            return;
+          }
+          const itemToPaste = await this.extractItemToPaste(e.clipboardData);
+          if (!itemToPaste) {
+            return;
+          }
+          console.log("Pasting", itemToPaste);
+          spawn(
+            this.props.studioCtx.changeUnsafe(() => this.pasteItem(itemToPaste))
           );
-          this.clipboardAction = "copy";
-        }
-      })(e);
-    });
-    this.registerListener("cut", (e: ClipboardEvent) => {
-      trackEvent("Cut");
-      console.log("Cut event", e);
-      this.hotkey(async () => {
-        if (e.clipboardData) {
-          await this.viewOps().cut();
-          e.clipboardData.setData(
-            "application/vnd.plasmic.clipboard+json",
-            JSON.stringify({ action: "cut" })
-          );
-          this.clipboardAction = "cut";
-        }
-      })(e);
-    });
-    this.registerListener("paste", async (e) => {
-      trackEvent("Paste");
-      this.hotkey(async () => {
-        if (!e.clipboardData) {
-          return;
-        }
-        const itemToPaste = await this.extractItemToPaste(e.clipboardData);
-        if (!itemToPaste) {
-          return;
-        }
-        console.log("Pasting", itemToPaste);
-        spawn(
-          this.props.studioCtx.changeUnsafe(() => this.pasteItem(itemToPaste))
-        );
-      }, false)(e);
-    });
+        }, false)(e);
+      });
+    }
 
     const initArena = this.props.studioCtx.currentArena;
     const viewportCtx = new ViewportCtx({
@@ -1919,7 +1927,11 @@ class ViewEditor_ extends React.Component<ViewEditorProps, ViewEditorState> {
     if (
       this.props.studioCtx.isLiveMode ||
       this.props.studioCtx.isInteractiveMode ||
-      !focusedVc
+      !focusedVc ||
+      !isCoreTeamEmail(
+        this.props.studioCtx.appCtx.selfInfo?.email,
+        this.props.studioCtx.appCtx.appConfig
+      )
     ) {
       return;
     }

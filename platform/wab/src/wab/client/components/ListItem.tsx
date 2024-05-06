@@ -5,9 +5,11 @@ import {
   PlasmicListItem,
   PlasmicListItem__OverridesType,
 } from "@/wab/client/plasmic/plasmic_kit_design_system/PlasmicListItem";
+import { useStudioCtx } from "@/wab/client/studio-ctx/StudioCtx";
 import { combineProps } from "@/wab/commons/components/ReactUtil";
 import * as React from "react";
 import { DraggableProvidedDragHandleProps } from "react-beautiful-dnd";
+import { isCoreTeamEmail } from "src/wab/shared/devflag-utils";
 import { MenuType, useContextMenu } from "./ContextMenu";
 
 interface ListItemProps
@@ -35,7 +37,12 @@ function ListItem(props: ListItemProps) {
     ...rest
   } = props;
   const [hover, setHover] = React.useState(false);
-  const contextMenuProps = useContextMenu({ menu });
+  const studioCtx = useStudioCtx();
+  const isAdmin = isCoreTeamEmail(
+    studioCtx.appCtx.selfInfo?.email,
+    studioCtx.appCtx.appConfig
+  );
+  const contextMenuProps = isAdmin ? useContextMenu({ menu }) : {};
   return (
     <PlasmicListItem
       {...rest}
@@ -74,12 +81,16 @@ function ListItem(props: ListItemProps) {
               })
             : { display: "none" },
       }}
-      hasMenu={!!menu}
-      menuButton={{
-        props: {
-          ...contextMenuProps,
-        },
-      }}
+      hasMenu={isAdmin && !!menu}
+      menuButton={
+        !isAdmin
+          ? {}
+          : {
+              props: {
+                ...contextMenuProps,
+              },
+            }
+      }
       showAdditionalRow={!!props.additional}
     />
   );

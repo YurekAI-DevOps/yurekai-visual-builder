@@ -109,6 +109,7 @@ import { computedFn } from "mobx-utils";
 import pluralize from "pluralize";
 import * as React from "react";
 import { FixedSizeList } from "react-window";
+import { isCoreTeamEmail } from "src/wab/shared/devflag-utils";
 
 import {
   getNodeSummary,
@@ -733,7 +734,13 @@ const TplTreeNode = observer(function TplTreeNode(props: {
         });
       }}
       onContextMenu={(e) => {
-        if (!isOutOfContext) {
+        if (
+          !isOutOfContext &&
+          isCoreTeamEmail(
+            viewCtx.studioCtx.appCtx.selfInfo?.email,
+            viewCtx.studioCtx.appCtx.appConfig
+          )
+        ) {
           viewCtx.tryBlurEditingText();
           maybeShowContextMenu(e.nativeEvent, makeTreeNodeMenu(viewCtx, item));
         }
@@ -785,15 +792,20 @@ const TplTreeNode = observer(function TplTreeNode(props: {
       {!codeComponentRoot && !codeComponentSlot && renderRep()}
       {!codeComponentRoot && renderLockToggle()}
       {!codeComponentRoot && !codeComponentSlot && renderVisibilityToggle()}
-      {!codeComponentRoot && !codeComponentSlot && (
-        <MenuButton
-          className={"tpltree__label__menu"}
-          menu={
-            isOutOfContext ? undefined : () => makeTreeNodeMenu(viewCtx, item)
-          }
-          onVisibleChange={visibleChangeCallback}
-        />
-      )}
+      {!codeComponentRoot &&
+        !codeComponentSlot &&
+        isCoreTeamEmail(
+          viewCtx.studioCtx.appCtx.selfInfo?.email,
+          viewCtx.studioCtx.appCtx.appConfig
+        ) && (
+          <MenuButton
+            className={"tpltree__label__menu"}
+            menu={
+              isOutOfContext ? undefined : () => makeTreeNodeMenu(viewCtx, item)
+            }
+            onVisibleChange={visibleChangeCallback}
+          />
+        )}
       {
         <div
           className={"tpltree__label__indicator"}

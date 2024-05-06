@@ -59,6 +59,7 @@ import {
   isPositionManagedFrame,
 } from "@/wab/shared/Arenas";
 import { createNumericSize, showSizeCss, Unit } from "@/wab/shared/Css";
+import { isCoreTeamEmail } from "@/wab/shared/devflag-utils";
 import { isTplAutoSizable, resetTplSize } from "@/wab/shared/sizingutils";
 import { SlotSelection } from "@/wab/slots";
 import {
@@ -460,6 +461,11 @@ function HoverBoxInner_({ viewProps }: { viewProps: HoverBoxViewProps }) {
   // TASK #27926: Show corner resizers for arena scratch artboards
   // and for component artboard when their viewmode is set to FrameViewMode.Centered.
   const canShowCornerResizers = false;
+
+  const isAdmin = isCoreTeamEmail(
+    studioCtx.appCtx.selfInfo?.email,
+    studioCtx.appCtx.appConfig
+  );
 
   return (
     <Observer>
@@ -964,12 +970,14 @@ function HoverBoxInner_({ viewProps }: { viewProps: HoverBoxViewProps }) {
                   )}
               </>
             }
-            <InlineAddButton
-              elementWidth={state?.width}
-              elementHeight={state?.height}
-              dimensionsBoxWidth={dimsBoxWidth}
-              key={state?.tagUid}
-            />
+            {isAdmin && (
+              <InlineAddButton
+                elementWidth={state?.width}
+                elementHeight={state?.height}
+                dimensionsBoxWidth={dimsBoxWidth}
+                key={state?.tagUid}
+              />
+            )}
           </div>
         );
       }}

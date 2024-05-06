@@ -75,6 +75,7 @@ import React, {
 } from "react";
 import { useDebounce, useLocalStorage } from "react-use";
 import { FixedSizeList } from "react-window";
+import { isCoreTeamEmail } from "src/wab/shared/devflag-utils";
 import FolderItem from "./FolderItem";
 import styles from "./ProjectPanel.module.scss";
 
@@ -641,28 +642,41 @@ function getFolderItemMenuRenderer({
 
     const contentEditorMode = studioCtx.contentEditorMode;
 
+    const isAdmin = isCoreTeamEmail(
+      studioCtx.appCtx.selfInfo?.email,
+      studioCtx.appCtx.appConfig
+    );
+
     const shouldShowItem = {
       duplicate:
+        isAdmin &&
         isDedicatedArena(folderItem.item) &&
         !isSubComp &&
         (!contentEditorMode || (component && isPageComponent(component))),
       editInNewArtboard:
+        isAdmin &&
         isMixedArena(currentArena) &&
         isDedicatedArena(folderItem.item) &&
         !contentEditorMode,
       convertToComponent:
-        component && isPageComponent(component) && !contentEditorMode,
+        isAdmin &&
+        component &&
+        isPageComponent(component) &&
+        !contentEditorMode,
       convertToPage:
+        isAdmin &&
         component &&
         isReusableComponent(component) &&
         !isSubComp &&
         !isSuperComp &&
         !contentEditorMode,
       delete:
+        isAdmin &&
         !isSubComp &&
         (!contentEditorMode || (component && isPageComponent(component))),
-      findReferences: component && isReusableComponent(component),
+      findReferences: isAdmin && component && isReusableComponent(component),
       replaceAllInstances:
+        isAdmin &&
         component &&
         isReusableComponent(component) &&
         replaceAllInstancesMenuItems.length !== 0 &&

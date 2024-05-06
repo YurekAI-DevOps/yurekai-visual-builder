@@ -689,6 +689,11 @@ function ProjectPanelTop_(
     ]
   );
 
+  const isAdmin = isCoreTeamEmail(
+    studioCtx.appCtx.selfInfo?.email,
+    studioCtx.appCtx.appConfig
+  );
+
   return (
     <div className={styles.root} ref={outerRef} {...testIds.projectPanel}>
       <FocusScope contain>
@@ -700,47 +705,55 @@ function ProjectPanelTop_(
           root={{
             ...getComboboxProps(),
           }}
-          plusButton={{
-            props: {
-              id: "proj-panel-plus-btn",
-              tooltip: contentEditorMode
-                ? "Create new page"
-                : "Create new page or component",
-              onClick: contentEditorMode ? onRequestAdding("page") : undefined,
-            },
-            wrap: contentEditorMode
-              ? undefined
-              : (plusButton) => (
-                  <Dropdown
-                    placement={"bottomRight"}
-                    children={plusButton}
-                    overlay={
-                      <Menu>
-                        <Menu.Item onClick={onRequestAdding("page")}>
-                          New <strong>page</strong>
-                        </Menu.Item>
-                        {!contentEditorMode && (
-                          <Menu.Item onClick={onRequestAdding("component")}>
-                            New <strong>component</strong>
-                          </Menu.Item>
-                        )}
-                        {!contentEditorMode && (
-                          <Menu.Item onClick={onRequestAdding("arena")}>
-                            <LabelWithDetailedTooltip
-                              tooltip={ARENAS_DESCRIPTION}
-                            >
-                              <span>
-                                New <strong>{ARENA_LOWER}</strong>
-                              </span>
-                            </LabelWithDetailedTooltip>
-                          </Menu.Item>
-                        )}
-                      </Menu>
-                    }
-                    trigger={["click"]}
-                  />
-                ),
-          }}
+          plusButton={
+            !isAdmin
+              ? { render: () => null }
+              : {
+                  props: {
+                    id: "proj-panel-plus-btn",
+                    tooltip: contentEditorMode
+                      ? "Create new page"
+                      : "Create new page or component",
+                    onClick: contentEditorMode
+                      ? onRequestAdding("page")
+                      : undefined,
+                  },
+                  wrap: contentEditorMode
+                    ? undefined
+                    : (plusButton) => (
+                        <Dropdown
+                          placement={"bottomRight"}
+                          children={plusButton}
+                          overlay={
+                            <Menu>
+                              <Menu.Item onClick={onRequestAdding("page")}>
+                                New <strong>page</strong>
+                              </Menu.Item>
+                              {!contentEditorMode && (
+                                <Menu.Item
+                                  onClick={onRequestAdding("component")}
+                                >
+                                  New <strong>component</strong>
+                                </Menu.Item>
+                              )}
+                              {!contentEditorMode && (
+                                <Menu.Item onClick={onRequestAdding("arena")}>
+                                  <LabelWithDetailedTooltip
+                                    tooltip={ARENAS_DESCRIPTION}
+                                  >
+                                    <span>
+                                      New <strong>{ARENA_LOWER}</strong>
+                                    </span>
+                                  </LabelWithDetailedTooltip>
+                                </Menu.Item>
+                              )}
+                            </Menu>
+                          }
+                          trigger={["click"]}
+                        />
+                      ),
+                }
+          }
           searchInput={{
             wrap: () => (
               <PlasmicSearchInput

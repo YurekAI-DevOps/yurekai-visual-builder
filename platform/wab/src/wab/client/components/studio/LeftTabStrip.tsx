@@ -29,6 +29,7 @@ import { TutorialEventsType } from "@/wab/client/tours/tutorials/tutorials-event
 import { spawn, unexpected } from "@/wab/common";
 import { Stated } from "@/wab/commons/components/Stated";
 import { DEVFLAGS } from "@/wab/devflags";
+import { isCoreTeamEmail } from "@/wab/shared/devflag-utils";
 import { MIXINS_CAP } from "@/wab/shared/Labels";
 import {
   getLeftTabPermission,
@@ -79,6 +80,11 @@ const LeftTabStrip = observer(function LeftTabStrip(props: LeftTabStripProps) {
 
   const isWhiteLabelUser = studioCtx.appCtx.isWhiteLabelUser();
   const uiConfig = studioCtx.getCurrentUiConfig();
+
+  const isAdmin = isCoreTeamEmail(
+    studioCtx.appCtx.selfInfo?.email,
+    studioCtx.appCtx.appConfig
+  );
 
   const canViewTab = (tab: LeftTabButtonKey) => {
     return (
@@ -259,7 +265,9 @@ Help
       label: "Issues detected",
       cond: DEVFLAGS.linting && canViewTab("lint"),
     },
-    ...(contentEditorMode
+    ...(isAdmin
+      ? mainGroups
+      : contentEditorMode
       ? {
           more: {
             ...mainGroups.more,
@@ -270,7 +278,7 @@ Help
             ),
           },
         }
-      : mainGroups),
+      : {}),
     helpGroup: {
       type: "group",
       icon: <HelpCirclesvgIcon />,
@@ -352,18 +360,26 @@ Help
     <PlasmicLeftTabStrip
       showAvatar
       activeTab={studioCtx.leftTabKey}
-      insert={{
-        props: {
-          onClick: () => {
-            studioCtx.tourActionEvents.dispatch({
-              type: TutorialEventsType.AddButtonClicked,
-            });
-            spawn(
-              studioCtx.changeUnsafe(() => studioCtx.setShowAddDrawer(true))
-            );
-          },
-        },
-      }}
+      insert={
+        !isAdmin
+          ? {
+              render: () => null,
+            }
+          : {
+              props: {
+                onClick: () => {
+                  studioCtx.tourActionEvents.dispatch({
+                    type: TutorialEventsType.AddButtonClicked,
+                  });
+                  spawn(
+                    studioCtx.changeUnsafe(() =>
+                      studioCtx.setShowAddDrawer(true)
+                    )
+                  );
+                },
+              },
+            }
+      }
       root={{ className: props.className, id: "left-tab-strip" }}
       buttons={Object.entries(menu).map(([key, item]) =>
         item.type === "item"
