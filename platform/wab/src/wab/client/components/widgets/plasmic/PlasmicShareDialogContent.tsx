@@ -296,7 +296,7 @@ function PlasmicShareDialogContent__RenderFunc(props: {
         >
           {hasVariant($state, "resourceType", "team")
             ? "Anyone with the link join the team as"
-            : "Who can open this Plasmic project?"}
+            : "Who can open this Builder YurekAI project?"}
         </div>
         <Stack__
           as={"div"}
@@ -530,7 +530,7 @@ function PlasmicShareDialogContent__RenderFunc(props: {
               >
                 {hasVariant($state, "resourceType", "team")
                   ? "Anyone with the link join the team as"
-                  : "Any Plasmic user with the link is a"}
+                  : "Any Builder YurekAI user with the link is a"}
               </div>
               <Select
                 data-plasmic-name={"shareByLinkPermDropdown"}
@@ -1057,7 +1057,7 @@ function PlasmicShareDialogContent__RenderFunc(props: {
                       : undefined
                   }
                 >
-                  {"Invite existing Plasmic users only"}
+                  {"Invite existing Builder YurekAI users only"}
                 </Checkbox>
               </Stack__>
             ) : null}
