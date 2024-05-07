@@ -286,13 +286,31 @@ const INSERT_PANEL_CONTENT: InsertPanelConfig = {
   overrideSections: {
     website: {
       "Default components": {
-        Common: ["text"],
+        Common: [
+          "text",
+          "section",
+          "columns",
+          "image",
+          "icon",
+          "button",
+          "form",
+        ],
       },
     },
   } as Record<string, Record<string, Record<string, string[]>>>,
   builtinSections: {
     "Default components": {
-      Common: ["text", "button"],
+      Common: [
+        "table",
+        "text",
+        "button",
+        "input",
+        "select",
+        "image",
+        "form",
+        "section",
+        "columns",
+      ],
       General: ["button", "text", "heading", "link"],
       Display: [
         "table",
