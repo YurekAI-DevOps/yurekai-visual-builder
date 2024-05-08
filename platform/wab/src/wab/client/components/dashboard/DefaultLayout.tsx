@@ -24,6 +24,7 @@ import { observer } from "mobx-react-lite";
 import * as React from "react";
 import { useState } from "react";
 import { useHistory } from "react-router";
+import { isCoreTeamEmail } from "src/wab/shared/devflag-utils";
 import { promptNewTeam } from "./dashboard-actions";
 import NavSeparator from "./NavSeparator";
 import NavTeamSection from "./NavTeamSection";
@@ -198,7 +199,9 @@ function DefaultLayout_(
           </React.Fragment>
         ))}
         newProjectButton={
-          props.newProjectButtonAsDropdown
+          !isCoreTeamEmail(appCtx.selfInfo?.email, appCtx.appConfig)
+            ? { render: () => null }
+            : props.newProjectButtonAsDropdown
             ? {
                 wrap: (newProjectButton) => (
                   <Dropdown trigger={["click"]} overlay={projectCreationMenu}>
@@ -228,11 +231,17 @@ function DefaultLayout_(
                 render: () => null,
               }
         }
-        newTeamButton={{
-          onClick: async () => {
-            await promptNewTeam(appCtx, history);
-          },
-        }}
+        newTeamButton={
+          !isCoreTeamEmail(appCtx.selfInfo?.email, appCtx.appConfig)
+            ? {
+                render: () => null,
+              }
+            : {
+                onClick: async () => {
+                  await promptNewTeam(appCtx, history);
+                },
+              }
+        }
         userButton={{
           props: {
             children: userInfo.firstName,

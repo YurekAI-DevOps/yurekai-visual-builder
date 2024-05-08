@@ -21,6 +21,7 @@ import { getAccessLevelToResource } from "@/wab/shared/perms";
 import { HTMLElementRefOf } from "@plasmicapp/react-web";
 import * as React from "react";
 import { useHistory } from "react-router-dom";
+import { isCoreTeamEmail } from "src/wab/shared/devflag-utils";
 import { promptNewWorkspace } from "./dashboard-actions";
 import { ProjectsFilterProps } from "./ProjectsFilter";
 
@@ -118,40 +119,53 @@ function TeamPageHeader_(
       }
       numProjects={`${numProjects}`}
       numMembers={`${numMembers}`}
-      settingsButton={{
-        props: {
-          href: U.orgSettings({ teamId: team.id }),
-          tooltip: `${ORGANIZATION_CAP} settings`,
-        },
-        wrap: (node) => {
-          if (appCtx.appConfig.analytics) {
-            return (
-              <>
-                {node}
-                <IconButton
-                  href={U.orgAnalytics({ teamId: team.id })}
-                  tooltip={`${ORGANIZATION_CAP} analytics`}
-                >
-                  <Icon icon={ChartsvgIcon} />
-                </IconButton>
-              </>
-            );
-          } else {
-            return node;
-          }
-        },
-      }}
-      newWorkspaceButton={{
-        props: {
-          onClick: async () => {
-            await promptNewWorkspace(appCtx, history, team.id);
-          },
-        },
-        wrap: (node) =>
-          accessLevelRank(teamAccessLevel) >= accessLevelRank("editor") ? (
-            <>{node}</>
-          ) : null,
-      }}
+      settingsButton={
+        !isCoreTeamEmail(appCtx.selfInfo?.email, appCtx.appConfig)
+          ? {
+              render: () => null,
+            }
+          : {
+              props: {
+                href: U.orgSettings({ teamId: team.id }),
+                tooltip: `${ORGANIZATION_CAP} settings`,
+              },
+              wrap: (node) => {
+                if (appCtx.appConfig.analytics) {
+                  return (
+                    <>
+                      {node}
+                      <IconButton
+                        href={U.orgAnalytics({ teamId: team.id })}
+                        tooltip={`${ORGANIZATION_CAP} analytics`}
+                      >
+                        <Icon icon={ChartsvgIcon} />
+                      </IconButton>
+                    </>
+                  );
+                } else {
+                  return node;
+                }
+              },
+            }
+      }
+      newWorkspaceButton={
+        !isCoreTeamEmail(appCtx.selfInfo?.email, appCtx.appConfig)
+          ? {
+              render: () => null,
+            }
+          : {
+              props: {
+                onClick: async () => {
+                  await promptNewWorkspace(appCtx, history, team.id);
+                },
+              },
+              wrap: (node) =>
+                accessLevelRank(teamAccessLevel) >=
+                accessLevelRank("editor") ? (
+                  <>{node}</>
+                ) : null,
+            }
+      }
       filter={filterProps}
     />
   );

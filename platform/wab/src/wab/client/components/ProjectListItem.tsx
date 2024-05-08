@@ -18,6 +18,7 @@ import { Menu, notification } from "antd";
 import moment from "moment";
 import React from "react";
 import { useHistory } from "react-router-dom";
+import { isCoreTeamEmail } from "src/wab/shared/devflag-utils";
 import { promptMoveToWorkspace } from "./dashboard/dashboard-actions";
 import EditableResourceName from "./EditableResourceName";
 import { HostConfig } from "./HostConfig";
@@ -172,173 +173,185 @@ function ProjectListItem(props: ProjectListItemProps) {
             await onUpdate?.();
           },
         }}
-        menuButton={{
-          props: {
-            menu: () => (
-              <Menu>
-                {accessLevelRank(projectAccessLevel) >=
-                  accessLevelRank("editor") && (
-                  <Menu.Item onClick={() => setConfigProjectId(project.id)}>
-                    <strong>Configure</strong> project
-                  </Menu.Item>
-                )}
-                <Menu.Item
-                  onClick={async () => {
-                    const response = await promptMoveToWorkspace(
-                      appCtx,
-                      null,
-                      false,
-                      "Duplicate",
-                      project.name
-                    );
-                    if (response === undefined) {
-                      return;
-                    }
+        menuButton={
+          !isCoreTeamEmail(appCtx.selfInfo?.email, appCtx.appConfig)
+            ? {
+                render: () => null,
+              }
+            : {
+                props: {
+                  menu: () => (
+                    <Menu>
+                      {accessLevelRank(projectAccessLevel) >=
+                        accessLevelRank("editor") && (
+                        <Menu.Item
+                          onClick={() => setConfigProjectId(project.id)}
+                        >
+                          <strong>Configure</strong> project
+                        </Menu.Item>
+                      )}
+                      <Menu.Item
+                        onClick={async () => {
+                          const response = await promptMoveToWorkspace(
+                            appCtx,
+                            null,
+                            false,
+                            "Duplicate",
+                            project.name
+                          );
+                          if (response === undefined) {
+                            return;
+                          }
 
-                    const { projectId: newProjectId } =
-                      await appCtx.app.withSpinner(
-                        appCtx.api.cloneProject(
-                          project.id,
-                          response.result === "workspace"
-                            ? {
-                                workspaceId: response.workspace.id,
-                                name: response.name,
+                          const { projectId: newProjectId } =
+                            await appCtx.app.withSpinner(
+                              appCtx.api.cloneProject(
+                                project.id,
+                                response.result === "workspace"
+                                  ? {
+                                      workspaceId: response.workspace.id,
+                                      name: response.name,
+                                    }
+                                  : undefined
+                              )
+                            );
+
+                          history.push(
+                            U.project({
+                              projectId: newProjectId,
+                            })
+                          );
+                        }}
+                      >
+                        <strong>Duplicate</strong> project
+                      </Menu.Item>
+                      {DEVFLAGS.demo && (
+                        <Menu.Item onClick={() => appOps.download(project.id)}>
+                          <strong>Download</strong> project
+                        </Menu.Item>
+                      )}
+                      {workspaces && canMove && (
+                        <Menu.Item
+                          onClick={async () => {
+                            const response = await promptMoveToWorkspace(
+                              appCtx,
+                              project.workspaceId,
+                              false,
+                              "Move"
+                            );
+                            if (response === undefined) {
+                              return;
+                            }
+                            await maybeShowPaywall(
+                              appCtx,
+                              async () =>
+                                await appCtx.api.setSiteInfo(project.id, {
+                                  workspaceId:
+                                    response.result === "workspace"
+                                      ? response.workspace.id
+                                      : null,
+                                }),
+                              {
+                                title: "Upgrade to move this project",
+                                description:
+                                  "The destination workspace belongs to a team that does not have enough seats. Increase the number of seats to perform this action.",
                               }
-                            : undefined
-                        )
-                      );
+                            );
+                            notification.info({
+                              message: `Project moved to ${
+                                response.result === "workspace"
+                                  ? response.workspace.name
+                                  : PERSONAL_WORKSPACE
+                              }.`,
+                            });
+                            await onUpdate?.();
+                          }}
+                        >
+                          <strong>Move</strong> to workspace
+                        </Menu.Item>
+                      )}
+                      {accessLevelRank(workspaceAccessLevel) >=
+                        accessLevelRank("editor") && (
+                        <Menu.Item
+                          onClick={async () => {
+                            await appCtx.api.setSiteInfo(project.id, {
+                              isUserStarter: !project.isUserStarter,
+                            });
+                            notification.success({
+                              message: `Project "${project.name}" ${
+                                project.isUserStarter ? "unset" : "set"
+                              } as workspace starter.`,
+                            });
 
-                    history.push(
-                      U.project({
-                        projectId: newProjectId,
-                      })
-                    );
-                  }}
-                >
-                  <strong>Duplicate</strong> project
-                </Menu.Item>
-                {DEVFLAGS.demo && (
-                  <Menu.Item onClick={() => appOps.download(project.id)}>
-                    <strong>Download</strong> project
-                  </Menu.Item>
-                )}
-                {workspaces && canMove && (
-                  <Menu.Item
-                    onClick={async () => {
-                      const response = await promptMoveToWorkspace(
-                        appCtx,
-                        project.workspaceId,
-                        false,
-                        "Move"
-                      );
-                      if (response === undefined) {
-                        return;
-                      }
-                      await maybeShowPaywall(
-                        appCtx,
-                        async () =>
-                          await appCtx.api.setSiteInfo(project.id, {
-                            workspaceId:
-                              response.result === "workspace"
-                                ? response.workspace.id
-                                : null,
-                          }),
-                        {
-                          title: "Upgrade to move this project",
-                          description:
-                            "The destination workspace belongs to a team that does not have enough seats. Increase the number of seats to perform this action.",
-                        }
-                      );
-                      notification.info({
-                        message: `Project moved to ${
-                          response.result === "workspace"
-                            ? response.workspace.name
-                            : PERSONAL_WORKSPACE
-                        }.`,
-                      });
-                      await onUpdate?.();
-                    }}
-                  >
-                    <strong>Move</strong> to workspace
-                  </Menu.Item>
-                )}
-                {accessLevelRank(workspaceAccessLevel) >=
-                  accessLevelRank("editor") && (
-                  <Menu.Item
-                    onClick={async () => {
-                      await appCtx.api.setSiteInfo(project.id, {
-                        isUserStarter: !project.isUserStarter,
-                      });
-                      notification.success({
-                        message: `Project "${project.name}" ${
-                          project.isUserStarter ? "unset" : "set"
-                        } as workspace starter.`,
-                      });
-
-                      await onUpdate?.();
-                    }}
-                  >
-                    <strong>{!project.isUserStarter ? "Set" : "Unset"}</strong>{" "}
-                    as workspace starter
-                  </Menu.Item>
-                )}
-                {!(
-                  accessLevelRank(workspaceAccessLevel) >=
-                  accessLevelRank("viewer")
-                ) &&
-                  accessLevelRank(projectAccessLevel) <
-                    accessLevelRank("owner") && (
-                    <Menu.Item
-                      onClick={async () => {
-                        const confirm = await reactConfirm({
-                          title: `Remove from dashboard`,
-                          message: (
-                            <>
-                              Are you sure you want to remove the project{" "}
-                              <strong>{project.name}</strong> from your
-                              dashboard? This will remove your current
-                              permissions on it.
-                            </>
-                          ),
-                        });
-                        if (!confirm) {
-                          return;
-                        }
-                        await appCtx.api.removeSelfPerm(project.id);
-                        await onUpdate?.();
-                      }}
-                    >
-                      <strong>Remove</strong> from dashboard
-                    </Menu.Item>
-                  )}
-                {accessLevelRank(projectAccessLevel) >=
-                  accessLevelRank("owner") && (
-                  <Menu.Item
-                    onClick={async () => {
-                      const confirm = await reactConfirm({
-                        title: `Delete project`,
-                        message: (
-                          <>
-                            Are you sure you want to delete the project{" "}
-                            <strong>{project.name}</strong>?
-                          </>
-                        ),
-                      });
-                      if (!confirm) {
-                        return;
-                      }
-                      await appOps.deleteSite(project.id);
-                      await onUpdate?.();
-                    }}
-                  >
-                    <strong>Delete</strong> project
-                  </Menu.Item>
-                )}
-              </Menu>
-            ),
-          },
-          wrap: (node) => <ClickStopper preventDefault>{node}</ClickStopper>,
-        }}
+                            await onUpdate?.();
+                          }}
+                        >
+                          <strong>
+                            {!project.isUserStarter ? "Set" : "Unset"}
+                          </strong>{" "}
+                          as workspace starter
+                        </Menu.Item>
+                      )}
+                      {!(
+                        accessLevelRank(workspaceAccessLevel) >=
+                        accessLevelRank("viewer")
+                      ) &&
+                        accessLevelRank(projectAccessLevel) <
+                          accessLevelRank("owner") && (
+                          <Menu.Item
+                            onClick={async () => {
+                              const confirm = await reactConfirm({
+                                title: `Remove from dashboard`,
+                                message: (
+                                  <>
+                                    Are you sure you want to remove the project{" "}
+                                    <strong>{project.name}</strong> from your
+                                    dashboard? This will remove your current
+                                    permissions on it.
+                                  </>
+                                ),
+                              });
+                              if (!confirm) {
+                                return;
+                              }
+                              await appCtx.api.removeSelfPerm(project.id);
+                              await onUpdate?.();
+                            }}
+                          >
+                            <strong>Remove</strong> from dashboard
+                          </Menu.Item>
+                        )}
+                      {accessLevelRank(projectAccessLevel) >=
+                        accessLevelRank("owner") && (
+                        <Menu.Item
+                          onClick={async () => {
+                            const confirm = await reactConfirm({
+                              title: `Delete project`,
+                              message: (
+                                <>
+                                  Are you sure you want to delete the project{" "}
+                                  <strong>{project.name}</strong>?
+                                </>
+                              ),
+                            });
+                            if (!confirm) {
+                              return;
+                            }
+                            await appOps.deleteSite(project.id);
+                            await onUpdate?.();
+                          }}
+                        >
+                          <strong>Delete</strong> project
+                        </Menu.Item>
+                      )}
+                    </Menu>
+                  ),
+                },
+                wrap: (node) => (
+                  <ClickStopper preventDefault>{node}</ClickStopper>
+                ),
+              }
+        }
         projectIdCopyButton={{
           wrap: (node) => <ClickStopper preventDefault>{node}</ClickStopper>,
           props: {

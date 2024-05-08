@@ -24,6 +24,7 @@ import {
   ApiProject,
   ApiWorkspace,
 } from "@/wab/shared/ApiSchema";
+import { isCoreTeamEmail } from "@/wab/shared/devflag-utils";
 import { accessLevelRank } from "@/wab/shared/EntUtil";
 import { DATA_SOURCE_PLURAL_LOWER } from "@/wab/shared/Labels";
 import {
@@ -208,9 +209,15 @@ function WorkspaceSection_(
             ? "cantEdit"
             : undefined
         }
-        newProjectButton={{
-          onClick: () => setShowNewProjectModal(true),
-        }}
+        newProjectButton={
+          !isCoreTeamEmail(appCtx.selfInfo?.email, appCtx.appConfig)
+            ? {
+                render: () => null,
+              }
+            : {
+                onClick: () => setShowNewProjectModal(true),
+              }
+        }
         newCmsButton={{
           onClick: () =>
             spawn(promptNewDatabase(appCtx, history, workspace.id)),
@@ -224,20 +231,26 @@ function WorkspaceSection_(
           perms,
           reloadPerms: onUpdate,
         }}
-        moreButton={{
-          props: {
-            menu: (
-              <WorkspaceMenu
-                appCtx={appCtx}
-                workspace={workspace}
-                perms={perms}
-                onUpdate={onUpdate}
-                redirectOnDelete={!rest.inTeamPage}
-                projectCount={projects.length}
-              />
-            ),
-          },
-        }}
+        moreButton={
+          !isCoreTeamEmail(appCtx.selfInfo?.email, appCtx.appConfig)
+            ? {
+                render: () => null,
+              }
+            : {
+                props: {
+                  menu: (
+                    <WorkspaceMenu
+                      appCtx={appCtx}
+                      workspace={workspace}
+                      perms={perms}
+                      onUpdate={onUpdate}
+                      redirectOnDelete={!rest.inTeamPage}
+                      projectCount={projects.length}
+                    />
+                  ),
+                },
+              }
+        }
         projectsFilter={filterProps}
         noProjects={!projects.length && (!showTabs || openTab === "projects")}
         noProjectsText={
@@ -252,9 +265,15 @@ function WorkspaceSection_(
         projectsTab={{
           onClick: () => updateTab("projects"),
         }}
-        dataSourcesTab={{
-          onClick: () => updateTab("dataSources"),
-        }}
+        dataSourcesTab={
+          !isCoreTeamEmail(appCtx.selfInfo?.email, appCtx.appConfig)
+            ? {
+                render: () => null,
+              }
+            : {
+                onClick: () => updateTab("dataSources"),
+              }
+        }
         // If empty, just show default contents (No CMSes indicator)
         databases={databasesList.length > 0 ? databasesList : undefined}
         overrides={{
