@@ -13,7 +13,8 @@ REACT_APP_DEFAULT_HOST_URL=${HOST_URL} \
         REACT_APP_CDN_URL=${REACT_APP_CDN_URL:-http://localhost:3003} \
         CODEGEN_HOST=${REACT_APP_DEV_PROXY:-${CODEGEN_HOST:-http://localhost:3003}} \
         ENABLED_GET_EMAIL_VERIFICATION_TOKEN=1 \
-        SITE_ASSETS_BUCKET=plasmic-site-assets \
-        SITE_ASSETS_BASE_URL='https://site-assets.plasmic.app/' \
+        # SITE_ASSETS_BUCKET=plasmic-site-assets \
+        # SITE_ASSETS_BASE_URL='https://site-assets.plasmic.app/' \
+        LOADER_ASSETS_BUCKET=builder-loader-assets-dev  \
         DISABLE_BWRAP=1 \
         bash tools/run.bash src/wab/server/main.ts
