@@ -45,7 +45,7 @@ export async function runGitJob(
   const action = args.action ?? projectRepository.defaultAction;
 
   const { title, description } = mkCommitMessage(
-    args.title || `[plasmic] Sync project ${project.name}`,
+    args.title || `[builder-yurekai] Sync project ${project.name}`,
     args.description,
     user,
     project,

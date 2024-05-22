@@ -12,8 +12,8 @@ import { getGithubApp } from "./app";
 import { getDefaultBranch } from "./branches";
 import { GithubRef } from "./types";
 
-const gitUserName = "Plasmic Bot";
-const gitUserEmail = "ops+git@plasmic.app";
+const gitUserName = "Builder YurekAI Bot";
+const gitUserEmail = "ops+git@yurekai.com";
 export interface WorkflowData {
   branch: string;
   directory: string;
@@ -77,10 +77,10 @@ async function createOrUpdateFile(args: FileArgs) {
   });
 }
 
-const dispatchWorkflow = readFileSync(`${__dirname}/plasmic.yml`).toString();
+const dispatchWorkflow = readFileSync(`${__dirname}/builder.yml`).toString();
 export async function createOrUpdateWorkflow(args: Omit<GithubRef, "branch">) {
-  const message = "Add/update Plasmic workflow";
-  const path = ".github/workflows/plasmic.yml";
+  const message = "Add/update Builder YurekAI workflow";
+  const path = ".github/workflows/builder.yml";
   const content = dispatchWorkflow;
 
   // Workflow must be created on default branch (usually master/main) to
@@ -100,10 +100,10 @@ export async function createOrUpdateWorkflow(args: Omit<GithubRef, "branch">) {
   });
 }
 
-const pushWorkflow = readFileSync(`${__dirname}/plasmic-push.yml`).toString();
+const pushWorkflow = readFileSync(`${__dirname}/builder-push.yml`).toString();
 export async function createOrUpdatePushWorkflow(args: GithubRef) {
-  const message = "Add/update Plasmic push workflow";
-  const path = ".github/workflows/plasmic-push.yml";
+  const message = "Add/update Builder YurekAI push workflow";
+  const path = ".github/workflows/builder-push.yml";
   const content = pushWorkflow;
 
   await createOrUpdateFile({
@@ -143,7 +143,7 @@ export async function tryGetLastUnfinishedWorkflowRun(
     {
       owner,
       repo,
-      workflow_id: "plasmic.yml",
+      workflow_id: "builder.yml",
     }
   );
   const unfinishedRuns = allRuns.filter((run) =>
