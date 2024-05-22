@@ -1,5 +1,5 @@
 # Plasmic workflow v4
-name: Sync, build and deploy Plasmic app
+name: Sync, build and deploy YurekAI Builder app
 
 permissions:
   contents: write
@@ -33,8 +33,8 @@ jobs:
           key: lock-${{ hashFiles('**/package-lock.json', '**/yarn.lock') }}
           path: ${{ github.event.client_payload.data.directory }}/node_modules
       - id: init
-        name: Initializing Plasmic app...
-        uses: plasmicapp/plasmic-action@master
+        name: Initializing Builder YurekAI app...
+        uses: iwhdevops/yurekai-builder-action@yurekai
         with:
           run: init
           github_token: ${{ secrets.GITHUB_TOKEN }}
@@ -48,9 +48,9 @@ jobs:
           title: ${{ github.event.client_payload.data.title }}
           description: ${{ github.event.client_payload.data.description }}
       - id: sync
-        name: Syncing Plasmic project...
+        name: Syncing Builder YurekAI project...
         if: ${{ github.event.client_payload.data.scheme == 'codegen' && steps.init.outputs.synced != 'true' }}
-        uses: plasmicapp/plasmic-action@master
+        uses: iwhdevops/yurekai-builder-action@yurekai
         with:
           run: sync
           github_token: ${{ secrets.GITHUB_TOKEN }}
@@ -62,9 +62,9 @@ jobs:
           title: ${{ github.event.client_payload.data.title }}
           description: ${{ github.event.client_payload.data.description }}
       - id: build
-        name: Building Plasmic app...
+        name: Building Builder YurekAI app...
         if: ${{ github.event.client_payload.data.publish }}
-        uses: plasmicapp/plasmic-action@master
+        uses: iwhdevops/yurekai-builder-action@yurekai
         with:
           run: build
           branch: ${{ github.event.client_payload.data.branch }}
