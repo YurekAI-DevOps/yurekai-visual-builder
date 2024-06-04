@@ -21,6 +21,12 @@ jobs:
         with:
           persist-credentials: false
           fetch-depth: 0
+      - id: next-base-path
+        name: Add basePath to next configuration file
+        run: |
+          REPO=${{ github.repository }} \
+          REPO_NAME_ONLY=$(echo $REPO | cut -d'/' -f2) && \
+          sed -i.bak s,YOUR_REPO_NAME,/${REPO_NAME_ONLY},g ./next.config.js
       - id: node
         name: Setting up node v18...
         uses: actions/setup-node@v3

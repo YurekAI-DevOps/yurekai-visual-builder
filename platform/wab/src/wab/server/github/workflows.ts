@@ -122,7 +122,7 @@ export async function triggerWorkflow(ref: GithubRef, data: WorkflowData) {
   await octokit.request("POST /repos/{owner}/{repo}/dispatches", {
     owner,
     repo,
-    event_type: "plasmic",
+    event_type: "builder",
     client_payload: {
       data,
     },
