@@ -17,12 +17,6 @@ jobs:
         with:
           persist-credentials: false
           fetch-depth: 0
-      - id: next-base-path
-        name: Add basePath to next configuration file
-        run: |
-          REPO=${{ github.repository }} \
-          REPO_NAME_ONLY=$(echo $REPO | cut -d'/' -f2) && \
-          sed -i.bak s,YOUR_REPO_NAME,/${REPO_NAME_ONLY},g ./next.config.js
       - id: node
         name: Set up node v18
         uses: actions/setup-node@v3
@@ -34,6 +28,12 @@ jobs:
         with:
           key: lock-${{ hashFiles('package-lock.json', 'yarn.lock') }}
           path: node_modules
+      - id: next-base-path
+        name: Add basePath to next configuration file
+        run: |
+          REPO=${{ github.repository }} \
+          REPO_NAME_ONLY=$(echo $REPO | cut -d'/' -f2) && \
+          sed -i.bak s,YOUR_REPO_NAME,/${REPO_NAME_ONLY},g ./next.config.js
       - id: build
         name: Build Builder YurekAI app
         uses: plasmicapp/plasmic-action@master
