@@ -61,21 +61,25 @@ export function useAuthPopup(opts: {
 
   return {
     isWaiting,
-    open: (url: string) => {
-      setWaiting(true);
-      onStart?.();
-      spawn(api.removeStorageItem("authStatus"));
-      const popup = window.open(url, "_blank", "width=600,height=600");
-      if (popup) {
-        const timerId = window.setInterval(() => {
-          if (popup.closed) {
-            setWaiting(false);
-            window.clearInterval(timerId);
-            onEnd?.();
-          }
-        }, 500);
+    open: (url: string, bypass?: boolean) => {
+      if (bypass) {
+        onSuccess?.();
       } else {
-        alert("Please disable your popup blocker, then reload the page.");
+        setWaiting(true);
+        onStart?.();
+        spawn(api.removeStorageItem("authStatus"));
+        const popup = window.open(url, "_blank", "width=600,height=600");
+        if (popup) {
+          const timerId = window.setInterval(() => {
+            if (popup.closed) {
+              setWaiting(false);
+              window.clearInterval(timerId);
+              onEnd?.();
+            }
+          }, 500);
+        } else {
+          alert("Please disable your popup blocker, then reload the page.");
+        }
       }
     },
   };
@@ -88,9 +92,10 @@ export function ConnectOAuthButton(props: ConnectOAuthButtonProps) {
     onFailure = _.noop,
     disabled,
   } = props;
+  
   const { isWaiting, open } = useAuthPopup({ onStart, onSuccess, onFailure });
 
-  const onClick = () => open(props.url);
+  const onClick = () => open(props.url, true);
 
   if (props.render) {
     return props.render({ onClick, isWaiting });
