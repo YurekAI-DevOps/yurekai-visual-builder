@@ -83,6 +83,9 @@ export async function githubData(req: Request, res: Response) {
 
   const { data: orgs } = await octokit.request("GET /user/orgs");
 
+  // @ts-ignore
+  organizations.push(...orgs);
+
   // const {
   //   data: { installations },
   // } = await octokit.request("GET /user/installations");
