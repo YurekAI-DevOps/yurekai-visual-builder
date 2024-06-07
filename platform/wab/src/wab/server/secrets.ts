@@ -36,6 +36,7 @@ interface Secrets {
   github?: {
     appId: number;
     privateKey: string;
+    userAccessToken: string,
     oauth: {
       clientId: string;
       clientSecret: string;
@@ -191,3 +192,6 @@ export function updateSecrets(updates: Partial<Secrets>) {
   const updated = { ...existing, ...updates };
   fs.writeFileSync(getSecretsFile(), JSON.stringify(updated));
 }
+export function getGithubToken() {
+  return loadSecrets().github?.userAccessToken;
+} 
