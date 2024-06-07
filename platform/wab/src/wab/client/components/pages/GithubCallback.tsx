@@ -40,15 +40,15 @@ export function GithubCallback(props: { nonAuthCtx: NonAuthCtx }) {
     }
 
     try {
-      const { token, installations } =
-        await props.nonAuthCtx.api.connectGithubInstallations(state, code);
-      if (installations.length === 0) {
-        location.href = getURL("install", state);
-      } else {
-        localStorage.setItem("githubToken", token);
-        localStorage.setItem("authStatus", "Success");
-        window.close();
-      }
+      // const { token, installations } =
+      //   await props.nonAuthCtx.api.connectGithubInstallations(state, code);
+      // if (installations.length === 0) {
+      //   location.href = getURL("install", state);
+      // } else {
+      //   localStorage.setItem("githubToken", token);
+      //   localStorage.setItem("authStatus", "Success");
+      //   window.close();
+      // }
     } catch (e) {
       localStorage.setItem("authStatus", e.message);
       setErr(e.message);
