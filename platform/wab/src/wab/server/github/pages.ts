@@ -6,6 +6,7 @@ import * as Sentry from "@sentry/node";
 import { failableAsync } from "ts-failable";
 import { getGithubApp } from "./app";
 import { GithubRef } from "./types";
+import { getGithubToken } from '@/wab/server/secrets';
 
 type SetupGithubPagesError = "domain taken";
 
@@ -63,8 +64,14 @@ export async function setupGithubPages(ref: GithubRef, domain: string) {
     async ({ success, failure }) => {
       const { installationId, owner, repo, branch } = ref;
 
-      const app = getGithubApp();
-      const octokit = await app.getInstallationOctokit(installationId);
+      let app, octokit;
+
+      if (process.env.PLASMIC_NO_GH_APP) {
+        octokit = new Octokit({ auth: getGithubToken() });
+      } else {
+        app = getGithubApp();
+        octokit = await app.getInstallationOctokit(installationId);
+      }
 
       await initPagesBranch(octokit, ref);
 
@@ -83,7 +90,7 @@ export async function setupGithubPages(ref: GithubRef, domain: string) {
         await octokit.request("PUT /repos/{owner}/{repo}/pages", {
           owner,
           repo,
-          cname: domain,
+          cname: process.env.PLASMIC_NO_GH_APP ? null : domain,
           source: {
             branch,
             path: "/",
@@ -108,8 +115,14 @@ export async function tryUpdateCachedCname(
   // We best-effort update the cachedCname.
   await tryCatchElseAsync({
     try: async () => {
-      const app = getGithubApp();
-      const octokit = await app.getInstallationOctokit(installationId);
+      let app, octokit;
+
+      if (process.env.PLASMIC_NO_GH_APP) {
+        octokit = new Octokit({ auth: getGithubToken() });
+      } else {
+        app = getGithubApp();
+        octokit = await app.getInstallationOctokit(installationId);
+      }
 
       // We always assume branch is gh-pages.
       const { data } = await octokit.request(

@@ -40,6 +40,7 @@ import * as Sentry from "@sentry/node";
 import { Request, Response } from "express-serve-static-core";
 import { IFailable } from "ts-failable";
 import { getUser, parseQueryParams, userDbMgr } from "./util";
+import { getGithubToken } from '@/wab/server/secrets'; 
 
 function tryGetGithubTokenHeader(req: Request) {
   return req.headers["x-plasmic-github-token"] as string | undefined;
@@ -70,36 +71,44 @@ export async function connectGithubInstallations(req: Request, res: Response) {
 
 export async function githubData(req: Request, res: Response) {
   const { token: maybeToken } = parseQueryParams(req);
-  const token = ensureString(maybeToken ?? tryGetGithubTokenHeader(req));
+  const token = process.env.PLASMIC_NO_GH_APP ?
+    getGithubToken() || '' :
+    ensureString(maybeToken ?? tryGetGithubTokenHeader(req));
 
   const octokit = new Octokit({ auth: token });
   const repositories: GitRepository[] = [];
   const organizations: GithubOrganization[] = [];
 
   const { data: user } = await octokit.request("GET /user");
-  const {
-    data: { installations },
-  } = await octokit.request("GET /user/installations");
-  for (const installation of installations) {
-    const installationId = installation.id;
-    if (
-      installation.account?.type === "Organization" ||
-      installation.account?.login === user.login
-    ) {
-      organizations.push({
-        installationId,
-        login: ensure(
-          installation.account.login,
-          () => `Already checked login`
-        ),
-        type: ensure(installation.account.type, () => `Already checked type`),
-      });
-    }
 
-    repositories.push(
-      ...(await fetchGithubRepositories(octokit, installationId))
-    );
-  }
+  const { data: orgs } = await octokit.request("GET /user/orgs");
+
+  // const {
+  //   data: { installations },
+  // } = await octokit.request("GET /user/installations");
+  // for (const installation of installations) {
+  //   const installationId = installation.id;
+  //   if (
+  //     installation.account?.type === "Organization" ||
+  //     installation.account?.login === user.login
+  //   ) {
+  //     organizations.push({
+  //       installationId,
+  //       login: ensure(
+  //         installation.account.login,
+  //         () => `Already checked login`
+  //       ),
+  //       type: ensure(installation.account.type, () => `Already checked type`),
+  //     });
+  //   }
+  //   repositories.push(
+  //     ...(await fetchGithubRepositories(octokit, installationId || 1234))
+  //   );
+  // }
+
+  repositories.push(
+    ...(await fetchGithubRepositories(octokit, 1234))
+  );
 
   res.json(
     ensureType<GithubData>({
@@ -111,9 +120,11 @@ export async function githubData(req: Request, res: Response) {
 
 export async function setupExistingGithubRepo(req: Request, res: Response) {
   const { token: maybeToken, repository }: ExistingGithubRepoRequest = req.body;
-  const token = ensureString(maybeToken ?? tryGetGithubTokenHeader(req));
   const { installationId, name } = repository;
   const [owner, repo] = name.split("/");
+  const token = process.env.PLASMIC_NO_GH_APP ? 
+    getGithubToken() || '':
+    ensureString(maybeToken ?? tryGetGithubTokenHeader(req));
 
   await assertCanUseGithubRepository(token, owner, repo);
   await createOrUpdateWorkflow({
@@ -138,7 +149,9 @@ export async function setupNewGithubRepo(req: Request, res: Response) {
       privateRepo,
       domain,
     }: NewGithubRepoRequest = req.body;
-    const token = ensureString(maybeToken ?? tryGetGithubTokenHeader(req));
+    const token = process.env.PLASMIC_NO_GH_APP ? 
+      getGithubToken() || '':
+      ensureString(maybeToken ?? tryGetGithubTokenHeader(req));
 
     const octokit = new Octokit({ auth: token });
 
@@ -291,7 +304,9 @@ export async function addProjectRepository(req: Request, res: Response) {
   } = uncheckedCast<ApiProjectRepository>(req.body);
 
   const maybeToken = req.body.token as string | undefined;
-  const token = ensureString(maybeToken ?? tryGetGithubTokenHeader(req));
+  const token = process.env.PLASMIC_NO_GH_APP ? 
+    getGithubToken() || '' :
+    ensureString(maybeToken ?? tryGetGithubTokenHeader(req));
 
   const [repoOwner, repoName] = repository.split("/");
   await assertCanUseGithubRepository(token, repoOwner, repoName);
@@ -299,7 +314,7 @@ export async function addProjectRepository(req: Request, res: Response) {
   const mgr = userDbMgr(req);
   const repo = await mgr.createProjectRepository({
     projectId,
-    installationId,
+    installationId: installationId || 1234, // required: maybe it can be made optional
     repository,
     directory,
     defaultAction,

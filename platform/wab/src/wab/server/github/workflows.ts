@@ -1,4 +1,5 @@
 import { getStatusCodeFromResponse } from "@/wab/server/AppServer";
+import { getGithubToken } from '@/wab/server/secrets';
 import {
   GitSyncAction,
   GitSyncLanguage,
@@ -11,7 +12,7 @@ import { readFileSync } from "fs";
 import { getGithubApp } from "./app";
 import { getDefaultBranch } from "./branches";
 import { GithubRef } from "./types";
-
+import { Octokit } from "@octokit/core";
 const gitUserName = "Builder YurekAI Bot";
 const gitUserEmail = "ops+git@yurekai.com";
 export interface WorkflowData {
@@ -37,9 +38,15 @@ interface FileArgs extends GithubRef {
 async function createOrUpdateFile(args: FileArgs) {
   const { installationId, owner, repo, branch, path, content, message } = args;
 
-  const app = getGithubApp();
-  const octokit = await app.getInstallationOctokit(installationId);
+  let app, octokit;
 
+  if (process.env.PLASMIC_NO_GH_APP) {
+    octokit = new Octokit({ auth: getGithubToken() });
+  } else {
+    app = getGithubApp();
+    octokit = await app.getInstallationOctokit(installationId);
+  }
+  
   let sha: string | undefined = undefined;
   try {
     const { data } = await octokit.request(
@@ -116,9 +123,15 @@ export async function createOrUpdatePushWorkflow(args: GithubRef) {
 
 export async function triggerWorkflow(ref: GithubRef, data: WorkflowData) {
   const { installationId, owner, repo } = ref;
+  let app, octokit;
+  
+  if (process.env.PLASMIC_NO_GH_APP) {
+    octokit = new Octokit({ auth: getGithubToken() });
+  } else {
+    app = getGithubApp();
+    octokit = await app.getInstallationOctokit(installationId);
+  }
 
-  const app = getGithubApp();
-  const octokit = await app.getInstallationOctokit(installationId);
   await octokit.request("POST /repos/{owner}/{repo}/dispatches", {
     owner,
     repo,
@@ -134,8 +147,15 @@ export async function tryGetLastUnfinishedWorkflowRun(
 ): Promise<GitWorkflowJobStatus> {
   const { installationId, owner, repo } = ref;
 
-  const app = getGithubApp();
-  const octokit = await app.getInstallationOctokit(installationId);
+  let app, octokit;
+  
+  if (process.env.PLASMIC_NO_GH_APP) {
+    octokit = new Octokit({ auth: getGithubToken() });
+  } else {
+    app = getGithubApp();
+    octokit = await app.getInstallationOctokit(installationId);
+  }
+
   const {
     data: { workflow_runs: allRuns },
   } = await octokit.request(
@@ -169,8 +189,15 @@ export async function getGitJob(
 ): Promise<GitWorkflowJob | undefined> {
   const { installationId, owner, repo } = ref;
 
-  const app = getGithubApp();
-  const octokit = await app.getInstallationOctokit(installationId);
+  let app, octokit;
+  
+  if (process.env.PLASMIC_NO_GH_APP) {
+    octokit = new Octokit({ auth: getGithubToken() });
+  } else {
+    app = getGithubApp();
+    octokit = await app.getInstallationOctokit(installationId);
+  }
+
   try {
     const {
       data: { jobs },

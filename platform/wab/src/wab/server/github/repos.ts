@@ -14,7 +14,7 @@ export async function fetchGithubRepositories(
   )) {
     repositories.push({
       name: repository.full_name,
-      installationId: installationId,
+      installationId: process.env.PLASMIC_NO_GH_APP ? 1234 : installationId,
       defaultBranch: repository.default_branch,
     });
   }
@@ -27,7 +27,9 @@ function repositoriesIterator(octokit: Octokit, installationId: number) {
     async *[Symbol.asyncIterator]() {
       const iterator = composePaginateRest.iterator(
         octokit,
-        "GET /user/installations/{installation_id}/repositories",
+        process.env.PLASMIC_NO_GH_APP ? 
+          "GET /user/repos" : 
+          "GET /user/installations/{installation_id}/repositories",
         { installation_id: installationId }
       );
 

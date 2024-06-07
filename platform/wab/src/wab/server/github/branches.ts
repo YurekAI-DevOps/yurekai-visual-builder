@@ -1,14 +1,20 @@
 import { App } from "@octokit/app";
 import { composePaginateRest } from "@octokit/plugin-paginate-rest";
 import { getGithubApp } from "./app";
-
+import { Octokit } from "@octokit/core";
+import { getGithubToken } from '@/wab/server/secrets';
 export async function fetchGithubBranches(
   installationId: number,
   repository: string
 ) {
   const [owner, repo] = repository.split("/");
   const branches: string[] = [];
-  const app = getGithubApp();
+
+  let app: App | null = null;
+
+  if (!process.env.PLASMIC_NO_GH_APP) {
+    app = getGithubApp();
+  } 
 
   for await (const { branch } of branchesIterator(
     app,
@@ -23,14 +29,21 @@ export async function fetchGithubBranches(
 }
 
 function branchesIterator(
-  app: App,
+  app: App | null,
   installationId: number,
   owner: string,
   repo: string
 ) {
   return {
     async *[Symbol.asyncIterator]() {
-      const octokit = await app.getInstallationOctokit(installationId);
+      let octokit;
+
+      if (process.env.PLASMIC_NO_GH_APP) {
+        octokit = new Octokit({ auth: getGithubToken() });  
+      } else {
+        octokit = await app?.getInstallationOctokit(installationId);
+      }
+
       const iterator = composePaginateRest.iterator(
         octokit,
         "GET /repos/{owner}/{repo}/branches",
@@ -51,8 +64,16 @@ export async function getDefaultBranch(
   owner: string,
   repo: string
 ) {
-  const app = getGithubApp();
-  const octokit = await app.getInstallationOctokit(installationId);
+  
+  let app, octokit;
+
+  if (process.env.PLASMIC_NO_GH_APP) {
+    octokit = new Octokit({ auth: getGithubToken() });
+  } else {
+    app = getGithubApp();
+    octokit = await app.getInstallationOctokit(installationId);
+  }
+
   const { data } = await octokit.request("GET /repos/{owner}/{repo}", {
     owner,
     repo,
