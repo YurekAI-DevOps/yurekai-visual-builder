@@ -12,9 +12,9 @@ export async function fetchGithubBranches(
 
   let app: App | null = null;
 
-  if (!process.env.PLASMIC_NO_GH_APP) {
+  if (installationId) {
     app = getGithubApp();
-  } 
+  }
 
   for await (const { branch } of branchesIterator(
     app,
@@ -38,7 +38,7 @@ function branchesIterator(
     async *[Symbol.asyncIterator]() {
       let octokit;
 
-      if (process.env.PLASMIC_NO_GH_APP) {
+      if (!app) {
         octokit = new Octokit({ auth: getGithubToken() });  
       } else {
         octokit = await app?.getInstallationOctokit(installationId);
@@ -67,7 +67,7 @@ export async function getDefaultBranch(
   
   let app, octokit;
 
-  if (process.env.PLASMIC_NO_GH_APP) {
+  if (!installationId) {
     octokit = new Octokit({ auth: getGithubToken() });
   } else {
     app = getGithubApp();

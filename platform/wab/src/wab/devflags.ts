@@ -582,8 +582,9 @@ const DEFAULT_DEVFLAGS = {
 
   // github settings
   githubClientId: "Iv1.b7b8546c2056c529",
-  githubAppName: "Local Website Builder",
-
+  githubAppName: "local-website-builder",
+  useGithubApp: false,
+  
   // change simplified defaults
   simplifiedLayout: false,
 

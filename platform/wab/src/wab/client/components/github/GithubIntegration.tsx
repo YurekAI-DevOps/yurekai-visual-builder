@@ -63,9 +63,15 @@ function GithubIntegration(props: GithubIntegrationProps) {
   const { appCtx, project, onSave, ...rest } = props;
   const projectId = project.id;
 
+  const useGhApp = () => appCtx.appConfig.useGithubApp;
+
   const [existingRepo, setExistingRepo] = React.useState<boolean>(false);
 
-  const hideGithubPages = true;
+  /*
+    hideGithubPages is a flag to hide/show the switch component to enable/disable 
+    the publishing on github Pages.
+  */ 
+  const hideGithubPages = false; 
 
   const [org, setOrg] = React.useState<GithubOrganization | undefined>(
     undefined
@@ -161,7 +167,7 @@ function GithubIntegration(props: GithubIntegrationProps) {
 
     const domain =
       !existingRepo && !hideGithubPages && publishSite
-        ? `${subdomain}.plasmic.site`
+        ? `${subdomain}.builder.site`
         : undefined;
     if (!existingRepo) {
       if (!org) {
@@ -346,7 +352,7 @@ function GithubIntegration(props: GithubIntegrationProps) {
             {r.login}
           </Select.Option>
         )),
-        isDisabled: (githubData.value?.organizations.length || 0) < 2,
+        isDisabled: !useGhApp() || (githubData.value?.organizations.length || 0) < 2,
         placeholder: githubData.loading
           ? "Loading organizations..."
           : "Select organization...",
@@ -445,7 +451,7 @@ function GithubIntegration(props: GithubIntegrationProps) {
             React)
           </Select.Option>,
         ],
-        isDisabled: existingRepo,
+        isDisabled: !useGhApp() || existingRepo,
         placeholder: detectedOptions.loading
           ? "Detecting framework..."
           : "Select framework...",
@@ -464,7 +470,7 @@ function GithubIntegration(props: GithubIntegrationProps) {
             TypeScript
           </Select.Option>,
         ],
-        isDisabled: existingRepo,
+        isDisabled: !useGhApp() || existingRepo,
         placeholder: detectedOptions.loading
           ? "Detecting language..."
           : "Select language...",
@@ -483,7 +489,7 @@ function GithubIntegration(props: GithubIntegrationProps) {
             Codegen
           </Select.Option>,
         ],
-        isDisabled: existingRepo || framework === "react",
+        isDisabled: !useGhApp() || existingRepo || framework === "react",
       }}
       modeInfo={{
         render: () => (
@@ -523,7 +529,7 @@ function GithubIntegration(props: GithubIntegrationProps) {
         isChecked: publishSite,
         onChange: (value) => setPublishSite(hideGithubPages ? false : value),
       }}
-      apparentSubdomainInput={{
+      apparentSubdomainInput={!useGhApp() ? { render: () => null } : {
         onMouseDown: (e) => {
           if (e.target !== subdomainInputRef.current) {
             e.preventDefault();
@@ -534,7 +540,7 @@ function GithubIntegration(props: GithubIntegrationProps) {
           }
         },
       }}
-      subdomainInput={{
+      subdomainInput={!useGhApp() ? { render: () => null } : {
         ref: subdomainInputRef,
         value: subdomain,
         onChange: (e) => {
@@ -550,13 +556,12 @@ function GithubIntegration(props: GithubIntegrationProps) {
         target: "_blank",
       }}
       pushButton={{
-        disabled:
-          saveState.loading ||
+        isDisabled: saveState.loading ||
           (!existingRepo &&
-            ((!nameError && (!org || !name)) ||
-              (publishSite &&
-                (hasPublishSiteError || domainError || !subdomain)))) ||
-          (existingRepo && !validExistingRepo),
+          ((!nameError && (!org || !name)) ||
+            (publishSite &&
+              (hasPublishSiteError || domainError || !subdomain)))) ||
+        (existingRepo && !validExistingRepo),
         onClick: saveProjectRepository,
       }}
       hideGithubPages={hideGithubPages}

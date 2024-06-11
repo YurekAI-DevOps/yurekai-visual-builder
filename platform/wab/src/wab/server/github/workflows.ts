@@ -40,7 +40,7 @@ async function createOrUpdateFile(args: FileArgs) {
 
   let app, octokit;
 
-  if (process.env.PLASMIC_NO_GH_APP) {
+  if (!installationId) {
     octokit = new Octokit({ auth: getGithubToken() });
   } else {
     app = getGithubApp();
@@ -125,7 +125,7 @@ export async function triggerWorkflow(ref: GithubRef, data: WorkflowData) {
   const { installationId, owner, repo } = ref;
   let app, octokit;
   
-  if (process.env.PLASMIC_NO_GH_APP) {
+  if (!installationId) {
     octokit = new Octokit({ auth: getGithubToken() });
   } else {
     app = getGithubApp();
@@ -149,7 +149,7 @@ export async function tryGetLastUnfinishedWorkflowRun(
 
   let app, octokit;
   
-  if (process.env.PLASMIC_NO_GH_APP) {
+  if (!installationId) {
     octokit = new Octokit({ auth: getGithubToken() });
   } else {
     app = getGithubApp();
@@ -191,7 +191,7 @@ export async function getGitJob(
 
   let app, octokit;
   
-  if (process.env.PLASMIC_NO_GH_APP) {
+  if (!installationId) {
     octokit = new Octokit({ auth: getGithubToken() });
   } else {
     app = getGithubApp();

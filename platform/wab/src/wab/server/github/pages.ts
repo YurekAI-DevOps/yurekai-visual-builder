@@ -66,7 +66,7 @@ export async function setupGithubPages(ref: GithubRef, domain: string) {
 
       let app, octokit;
 
-      if (process.env.PLASMIC_NO_GH_APP) {
+      if (!installationId) {
         octokit = new Octokit({ auth: getGithubToken() });
       } else {
         app = getGithubApp();
@@ -90,7 +90,7 @@ export async function setupGithubPages(ref: GithubRef, domain: string) {
         await octokit.request("PUT /repos/{owner}/{repo}/pages", {
           owner,
           repo,
-          cname: process.env.PLASMIC_NO_GH_APP ? null : domain,
+          cname: !installationId ? null : domain,
           source: {
             branch,
             path: "/",
@@ -117,7 +117,7 @@ export async function tryUpdateCachedCname(
     try: async () => {
       let app, octokit;
 
-      if (process.env.PLASMIC_NO_GH_APP) {
+      if (!installationId) {
         octokit = new Octokit({ auth: getGithubToken() });
       } else {
         app = getGithubApp();

@@ -1,4 +1,5 @@
 import { useNonAuthCtx } from "@/wab/client/app-ctx";
+import { useAppCtx } from "@/wab/client/contexts/AppContexts";
 import Button from "@/wab/client/components/widgets/Button";
 import { PlasmicButton__VariantsArgs } from "@/wab/client/plasmic/PlasmicButton";
 import { mkUuid, spawn } from "@/wab/common";
@@ -94,8 +95,11 @@ export function ConnectOAuthButton(props: ConnectOAuthButtonProps) {
   } = props;
   
   const { isWaiting, open } = useAuthPopup({ onStart, onSuccess, onFailure });
+  const appCtx = useAppCtx();
 
-  const onClick = () => open(props.url, true);
+  const { appConfig: { useGithubApp } } = appCtx;
+
+  const onClick = () => open(props.url, !useGithubApp);
 
   if (props.render) {
     return props.render({ onClick, isWaiting });

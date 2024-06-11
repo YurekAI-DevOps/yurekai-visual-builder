@@ -4,7 +4,7 @@ import { composePaginateRest } from "@octokit/plugin-paginate-rest";
 
 export async function fetchGithubRepositories(
   octokit: Octokit,
-  installationId: number
+  installationId?: number
 ): Promise<GitRepository[]> {
   const repositories: GitRepository[] = [];
 
@@ -14,7 +14,7 @@ export async function fetchGithubRepositories(
   )) {
     repositories.push({
       name: repository.full_name,
-      installationId: process.env.PLASMIC_NO_GH_APP ? 1234 : installationId,
+      installationId: installationId ?? 0,
       defaultBranch: repository.default_branch,
     });
   }
@@ -22,15 +22,17 @@ export async function fetchGithubRepositories(
   return repositories;
 }
 
-function repositoriesIterator(octokit: Octokit, installationId: number) {
+function repositoriesIterator(octokit: Octokit, installationId?: number) {
   return {
     async *[Symbol.asyncIterator]() {
       const iterator = composePaginateRest.iterator(
         octokit,
-        process.env.PLASMIC_NO_GH_APP ? 
+        !installationId ? 
           "GET /user/repos" : 
           "GET /user/installations/{installation_id}/repositories",
-        { installation_id: installationId }
+        installationId ? 
+          { installation_id: installationId } : 
+          {}
       );
 
       for await (const { data: repositories } of iterator) {

@@ -2,9 +2,13 @@ import { NonAuthCtx } from "@/wab/client/app-ctx";
 import { getURL } from "@/wab/client/components/auth/GithubConnect";
 import { useAsyncStrict } from "@/wab/client/hooks/useAsyncStrict";
 import * as React from "react";
-
+import { useAppCtx } from "@/wab/client/contexts/AppContexts"; 
 export function GithubCallback(props: { nonAuthCtx: NonAuthCtx }) {
   const [err, setErr] = React.useState("");
+
+  const appCtx = useAppCtx();
+
+  const { appConfig: { useGithubApp } } = appCtx;
 
   useAsyncStrict(async () => {
     const params = new URLSearchParams(location.search);
@@ -39,16 +43,19 @@ export function GithubCallback(props: { nonAuthCtx: NonAuthCtx }) {
       return;
     }
 
+    if (!useGithubApp)
+      return;
+
     try {
-      // const { token, installations } =
-      //   await props.nonAuthCtx.api.connectGithubInstallations(state, code);
-      // if (installations.length === 0) {
-      //   location.href = getURL("install", state);
-      // } else {
-      //   localStorage.setItem("githubToken", token);
-      //   localStorage.setItem("authStatus", "Success");
-      //   window.close();
-      // }
+      const { token, installations } =
+        await props.nonAuthCtx.api.connectGithubInstallations(state, code);
+      if (installations.length === 0) {
+        location.href = getURL("install", state);
+      } else {
+        localStorage.setItem("githubToken", token);
+        localStorage.setItem("authStatus", "Success");
+        window.close();
+      }
     } catch (e) {
       localStorage.setItem("authStatus", e.message);
       setErr(e.message);
