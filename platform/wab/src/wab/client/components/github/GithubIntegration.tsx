@@ -68,9 +68,9 @@ function GithubIntegration(props: GithubIntegrationProps) {
   const [existingRepo, setExistingRepo] = React.useState<boolean>(false);
 
   /*
-    hideGithubPages is a flag to hide/show the switch component to enable/disable 
-    the publishing on github Pages.
-  */ 
+   * hideGithubPages is a flag to hide/show the switch component to enable/disable 
+   * the publishing on github Pages.
+   */ 
   const hideGithubPages = false; 
 
   const [org, setOrg] = React.useState<GithubOrganization | undefined>(
@@ -179,7 +179,7 @@ function GithubIntegration(props: GithubIntegrationProps) {
         name,
         privateRepo,
         projectId,
-        domain,
+        domain: domain ?? "none",
       });
 
       if (response.type === "KnownError") {
