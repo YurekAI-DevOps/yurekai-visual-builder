@@ -166,7 +166,7 @@ function GithubIntegration(props: GithubIntegrationProps) {
     let dir = "";
 
     const domain =
-      !existingRepo && !hideGithubPages && publishSite
+      !existingRepo && !hideGithubPages && publishSite && subdomain
         ? `${subdomain}.builder.site`
         : undefined;
     if (!existingRepo) {

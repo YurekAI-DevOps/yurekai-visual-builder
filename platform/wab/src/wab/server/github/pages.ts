@@ -90,7 +90,7 @@ export async function setupGithubPages(ref: GithubRef, domain: string) {
         await octokit.request("PUT /repos/{owner}/{repo}/pages", {
           owner,
           repo,
-          cname: !installationId ? null : domain,
+          cname: (!installationId && domain) ? null : domain,
           source: {
             branch,
             path: "/",
