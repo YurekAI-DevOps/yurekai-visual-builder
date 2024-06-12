@@ -181,7 +181,7 @@ function PublishFlowDialog(props: PublishFlowDialogProps) {
     plasmicHostingDomains?.domains ?? []
   );
 
-  const getRepoName = (repository) => {
+  const getRepoName = (repository: string): string => {
     return repository.split("/")[1];
   };
 
@@ -373,8 +373,7 @@ function PublishFlowDialog(props: PublishFlowDialogProps) {
             )}`}
             target="_blank"
           >
-            https://site.yurekai.com/
-            {getRepoName(projectRepository.value.repository)}
+            { 'https://site.yurekai.com/'.concat(getRepoName(projectRepository.value.repository)) }
           </a>
         </div>
       ) : null}
