@@ -49,6 +49,7 @@ import { absorb, uncontrollable } from "./view-common";
 import { Icon } from "./widgets/Icon";
 import { IconButton } from "./widgets/IconButton";
 import { Textbox, TextboxRef } from "./widgets/Textbox";
+import LoadingRocket from "@/wab/commons/images/loading-rocket.gif";
 
 export type HTMLIProps = Omit<JSX.IntrinsicElements["i"], "ref">;
 export class DropdownArrow extends React.Component<HTMLIProps, {}> {
@@ -247,7 +248,8 @@ export class Spinner extends React.Component<{}, {}> {
   render() {
     return (
       <div className={"loader-container"}>
-        <div className={"loader"}>{"Loading..."}</div>
+        <img className={"loader"} src={LoadingRocket} />
+        {/* <div className={"loader"}>{"Loading..."}</div> */}
       </div>
     );
   }
