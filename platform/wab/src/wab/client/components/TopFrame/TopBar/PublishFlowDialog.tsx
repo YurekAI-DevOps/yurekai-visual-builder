@@ -181,6 +181,11 @@ function PublishFlowDialog(props: PublishFlowDialogProps) {
     plasmicHostingDomains?.domains ?? []
   );
 
+
+  const getRepoName = (repository) => {
+    return repository.split('/')[1];
+  }
+
   return (
     <>
       <PlasmicPublishFlowDialog
@@ -358,6 +363,15 @@ function PublishFlowDialog(props: PublishFlowDialogProps) {
           onClick: () => setView("status"),
         }}
       />
+      
+      { 
+        projectRepository.value?.repository && projectRepository.value?.publish ? 
+          <div style={{padding: "10px"}}>
+            Once deployed your site will be available at: <a href={`https://site.yurekai.com/ ${getRepoName(projectRepository.value.repository)}`} target="_blank">https://site.yurekai.com/{getRepoName(projectRepository.value.repository)}</a>
+          </div> :
+          null
+      }
+      
     </>
   );
 }
