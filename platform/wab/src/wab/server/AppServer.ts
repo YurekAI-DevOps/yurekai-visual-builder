@@ -114,6 +114,7 @@ import {
   listDataSources,
   testDataSourceConnection,
   updateDataSource,
+  getDatasourcesByProjectIds
 } from "./routes/data-source";
 import {
   getFakeBlurbs,
@@ -933,6 +934,7 @@ export function addIntegrationsRoutes(app: express.Application) {
 }
 
 export function addDataSourceRoutes(app: express.Application) {
+  app.get("/api/v1/data-source/projects/sources", withNext(getDatasourcesByProjectIds));
   app.get("/api/v1/data-source/sources", withNext(listDataSources));
   app.get(
     "/api/v1/data-source/sources/:dataSourceId",

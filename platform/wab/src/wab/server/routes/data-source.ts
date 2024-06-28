@@ -117,6 +117,17 @@ export async function createDataSource(req: Request, res: Response) {
   );
 }
 
+export async function getDatasourcesByProjectIds(req: Request, res: Response) {
+  const mgr = userDbMgr(req);
+  const projectIds = mgr.opts?.projectIdsAndTokens?.map(({ projectId }) => projectId) || [];
+  const data = await Promise.all([
+    ...projectIds?.map( async (projectId) => ({
+      [projectId]: await mgr.getProjectDataSources(projectId as ProjectId)
+    }))
+  ]);
+  res.json({ data });
+} 
+
 export async function testDataSourceConnection(req: Request, res: Response) {
   const mgr = userDbMgr(req);
 

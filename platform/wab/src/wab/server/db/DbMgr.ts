@@ -6406,6 +6406,15 @@ export class DbMgr implements MigrationDbMgr {
       deletedAt: IsNull(),
     });
   }
+  async getProjectDataSources(projectId: ProjectId) {
+    const allowedList = await this.listAllowedDataSourcesForProject(projectId)
+    const dataSources = allowedList.map(({ dataSourceId }) => dataSourceId)
+    return await Promise.all(
+      dataSources.map(
+        async (id) => await this.getDataSourceById(id, { columns: ["settings"], skipPermissionCheck: true })
+      )
+    );
+  }
 
   async getWorkspaceTutorialDataSources(workspaceId: WorkspaceId) {
     // We don't check permissions here because we don't want to require permissions
