@@ -1,6 +1,6 @@
 /** @format */
 
 export const adminEmails: string[] = [
-  "admin@example.com",
+  "admin@yurekai.com",
   "builder.demo@yurekai.com",
 ];
