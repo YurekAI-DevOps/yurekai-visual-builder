@@ -6,8 +6,7 @@ export function useBrowserNotification() {
   useEffect(() => {
     if (!isChrome) {
       notification.warn({
-        message:
-          "Right now, Plasmic Studio only works well with Chrome. We're working on it!",
+        message: "YurekAI builder is doing the magic! 🪄 Please be patient…",
         // Don't close automatically
         duration: 0,
       });

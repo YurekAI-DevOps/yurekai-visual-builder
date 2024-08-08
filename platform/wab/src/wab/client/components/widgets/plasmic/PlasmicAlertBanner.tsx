@@ -471,7 +471,7 @@ function PlasmicAlertBanner__RenderFunc(props: {
               : hasVariant($state, "state", "authError")
               ? "Please try logging in again."
               : hasVariant($state, "state", "notChrome")
-              ? "Right now, Plasmic Studio only works well with Chrome. We're working on it!"
+              ? "YurekAI builder is doing the magic! 🪄 Please be patient…"
               : hasVariant($state, "state", "viewOld")
               ? "To return to edit mode, reload the project"
               : hasVariant($state, "state", "saveFailed")
