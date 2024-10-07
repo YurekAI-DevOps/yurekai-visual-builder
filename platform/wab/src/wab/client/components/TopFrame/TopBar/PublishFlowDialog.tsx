@@ -368,12 +368,12 @@ function PublishFlowDialog(props: PublishFlowDialogProps) {
         <div style={{ padding: "10px" }}>
           Once deployed your site will be available at:{" "}
           <a
-            href={`https://site.yurekai.com/${getRepoName(
+            href={`https://sites.yurekai.com/${getRepoName(
               projectRepository.value.repository
             )}`}
             target="_blank"
           >
-            { 'https://site.yurekai.com/'.concat(getRepoName(projectRepository.value.repository)) }
+            { 'https://sites.yurekai.com/'.concat(getRepoName(projectRepository.value.repository)) }
           </a>
         </div>
       ) : null}
