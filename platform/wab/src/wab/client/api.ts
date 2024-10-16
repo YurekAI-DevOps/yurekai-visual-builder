@@ -230,11 +230,13 @@ export class Api extends SharedApi {
   }
 
   githubToken() {
-    const token = this.getStorageItem("githubToken");
-    if (!token) {
-      throw new Error("Missing GitHub token");
-    }
-    return { "x-plasmic-github-token": token };
+    return { "x-plasmic-github-token": "token" }; // it is for preventing errors
+    // Code below works for Github App
+    // const token = this.getStorageItem("githubToken");
+    // if (!token) {
+    //   return { "x-plasmic-github-token": "token" };
+    // }
+    // throw new Error("Missing GitHub token");
   }
 
   // listeners is a dict of unique IDs to registered handlers.
