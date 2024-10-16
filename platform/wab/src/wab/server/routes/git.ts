@@ -270,7 +270,7 @@ export async function setupNewGithubRepo(req: Request, res: Response) {
     success: (value) => {
       res.json(ensureType<NewGithubRepoResponse>(value));
     },
-    failure: (err) => {
+    failure: (err: any) => {
       switch (err) {
         case "domain taken":
         case "repo exists":
@@ -282,7 +282,19 @@ export async function setupNewGithubRepo(req: Request, res: Response) {
           );
           break;
         default:
-          throw err;
+          if (err?.response?.data?.errors?.length) {
+            const error = err?.response?.data?.errors?.[0];
+            if (error?.["message"] === "name already exists on this account") {
+              res.json(
+                ensureType<NewGithubRepoResponse>({
+                  type: "KnownError",
+                  knownError: "repo exists",
+                })
+              );
+            }
+          } else {
+            throw err;
+          }
       }
     },
   });
