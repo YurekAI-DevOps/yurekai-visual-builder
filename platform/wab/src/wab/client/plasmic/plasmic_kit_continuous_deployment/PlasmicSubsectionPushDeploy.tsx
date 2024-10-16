@@ -542,9 +542,9 @@ function PlasmicSubsectionPushDeploy__RenderFunc(props: {
                 }
               )}
             >
-              {"Publish to a new or existing GitHub repo."}
+              {"Publish to a new GitHub repo."}
             </div>
-            <a
+            {/* <a
               data-plasmic-name={"learnMoreLink"}
               data-plasmic-override={overrides.learnMoreLink}
               className={classNames(
@@ -559,7 +559,7 @@ function PlasmicSubsectionPushDeploy__RenderFunc(props: {
               target={"_blank"}
             >
               {"Learn more."}
-            </a>
+            </a> */}
           </p.Stack>
           <p.Stack
             as={"div"}

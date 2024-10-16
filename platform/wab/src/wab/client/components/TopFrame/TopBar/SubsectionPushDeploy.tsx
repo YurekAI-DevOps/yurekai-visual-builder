@@ -208,7 +208,7 @@ function SubsectionPushDeploy(props: SubsectionPushDeployProps) {
         border: "1px solid #e3e3e0",
       }}>
         <div style={{ display: "flex", backgroundColor: "#f9f9f8", padding: "15px" }}>Create Your Project</div>
-        <div style={{ paddingLeft: "15px" }}>Project's Name</div>
+        <div style={{ marginTop: "10px", paddingLeft: "15px" }}>Project's Name</div>
         <div style={{ display: "flex", flexDirection: "row", width: "100%" }}>
           <div style={{
             display: "flex",
@@ -221,12 +221,14 @@ function SubsectionPushDeploy(props: SubsectionPushDeployProps) {
               <input 
                 disabled={loading}
                 onChange={(e: any) => setRepoName(e.target.value)}
-                style={{ padding: "5px", width: "100%", border: ".5px solid grey", borderRadius: "2px" }}
+                style={{ padding: "5px", width: "100%", border: ".5px solid #00000047", borderRadius: "2px" }}
                 type="text"/>
             </div>
           </div>
           <div style={{
             display: "flex",
+            alignItems: "center",
+            textAlign: "center",
             justifyContent: "center",
             padding: "5px 15px",
           }}>
@@ -245,7 +247,7 @@ function SubsectionPushDeploy(props: SubsectionPushDeployProps) {
                 }}
                 disabled={!repoName}
                 onClick={ () => handleCreateRepo() }>Create</button>
-                : <div>Loading...</div>
+                : <div style={{ padding: "8px" }}>Loading...</div>
               }
           </div>
         </div>

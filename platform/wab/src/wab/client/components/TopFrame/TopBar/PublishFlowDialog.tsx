@@ -230,9 +230,10 @@ function PublishFlowDialog(props: PublishFlowDialogProps) {
         publishButton={{
           disabled:
             loadingVersion ||
-            (!subsectionMeta.saveVersion.enable &&
-              !subsectionMeta.pushDeploy.enable &&
-              !subsectionMeta.webhooks.enable),
+              !projectRepository.value?.repository,
+            // (!subsectionMeta.saveVersion.enable &&
+            //   !subsectionMeta.pushDeploy.enable &&
+            //   !subsectionMeta.webhooks.enable),
           onClick: publish,
           id: "publish-flow-dialog-publish-btn",
           ...(loadingVersion && { children: "Loading..." }),
