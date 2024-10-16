@@ -139,6 +139,15 @@ function PublishFlowDialog(props: PublishFlowDialogProps) {
   // Push and deploy (Git)
   const projectRepository = subsectionMeta.pushDeploy.setup.projectRepository;
 
+  /**
+   * Easy Github Integration
+   * Opens the pushDeploy section and hides Github Integration window.
+   */
+  React.useEffect(() => {
+    subsectionMeta.pushDeploy.setVisibleEnableBlock(true, false, true)
+    subsectionMeta.pushDeploy.setup.setConnectedToGithub(false);
+  }, [])
+
   // Webhooks
   const fetchWebhooks = useAsyncFnStrict(async () => {
     if (activatedBranch) {
@@ -237,6 +246,7 @@ function PublishFlowDialog(props: PublishFlowDialogProps) {
           },
         }}
         subsectionSaveVersion={{
+          style: { display: "none" }, // hides save version section
           project,
           closeDialog: closeDialog,
           changesSummary: (
@@ -351,6 +361,7 @@ function PublishFlowDialog(props: PublishFlowDialogProps) {
           },
         }}
         addActionsContainer={{
+          style: { display: "none" }, // hides Add ction container
           wrap: (node) =>
             !activatedBranch &&
             (!subsectionMeta.pushDeploy.visible ||

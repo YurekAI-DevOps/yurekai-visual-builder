@@ -127,7 +127,7 @@ export const PublishFlowDialogWrapper = observer(
     // Project versioning
     const [vebSaveVersion, setVEBSaveVersion] =
       React.useState<VisibleEnableBlockReadOnly>({
-        visible: true,
+        visible: false,
         enable: false,
         block: true,
       });

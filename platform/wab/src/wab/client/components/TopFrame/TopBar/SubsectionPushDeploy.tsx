@@ -98,6 +98,62 @@ function SubsectionPushDeploy(props: SubsectionPushDeployProps) {
     setConnectedToGithub,
   } = setup;
 
+
+  const [loading, setLoading] = React.useState<boolean>(false);
+  const [repoExists, setRepoExists] = React.useState<string | null>(null);
+
+  const handleCreateRepo = async () => {
+    try {
+      setRepoExists(null);
+      setLoading(true);
+      const data = await appCtx.api.fetchGithubData();      
+      const response: any = await appCtx.api.setupNewGithubRepo({
+        org: data.organizations[0],
+        name: repoName,
+        privateRepo: false,
+        projectId: project.id,
+        domain: "none",
+      });
+
+      if (response?.type === "KnownError") {
+        switch (response.knownError) {
+          case "repo exists":
+            setRepoExists("Repository's name already exists.")
+            console.error("Repo already exists");
+            break;
+          default:
+            break;
+        }
+        setLoading(false);
+        return;
+      }
+
+    
+      const repo = response.repo;
+  
+      await appCtx.api.addProjectRepository({
+        projectId: project.id,
+        installationId: 0,
+        repository: repo.name,
+        directory: "",
+        defaultAction: "build",
+        defaultBranch: repo.defaultBranch,
+        scheme: "loader",
+        platform: "nextjs",
+        language: "ts",
+        cachedCname: "none",
+        createdByPlasmic: true,
+        publish: true,
+      }); 
+  
+      await updateProjectRepository();
+      setLoading(false)
+    } catch (ex) {
+      console.error(ex);
+      setLoading(false)
+    }
+  }
+
   React.useEffect(() => {
     if (projectRepository.loading || projectRepository.error) {
       return;
@@ -130,6 +186,7 @@ function SubsectionPushDeploy(props: SubsectionPushDeployProps) {
   const [collapseOptions, setCollapseOptions] = React.useState<boolean>(true);
   const [pushAs, setPushAs] = React.useState<string>("");
   const [branch, setBranch] = React.useState<string>("");
+  const [repoName, setRepoName] = React.useState<string>("");
 
   if (props.view === "status" && !status?.enabled) {
     return null;
@@ -137,7 +194,71 @@ function SubsectionPushDeploy(props: SubsectionPushDeployProps) {
 
   return (
     <>
-      <PlasmicSubsectionPushDeploy
+    { 
+      !projectRepository.value && !projectRepository.loading ?
+      <div style={{
+        display: "flex",
+        position: "relative",
+        flexDirection: "column",
+        alignItems: "stretch",
+        justifyContent: "flex-start",
+        overflow: "hidden",
+        background: "rgb(255,255,255)",
+        borderRadius: "4px",
+        border: "1px solid #e3e3e0",
+      }}>
+        <div style={{ display: "flex", backgroundColor: "#f9f9f8", padding: "15px" }}>Create Your Project</div>
+        <div style={{ paddingLeft: "15px" }}>Project's Name</div>
+        <div style={{ display: "flex", flexDirection: "row", width: "100%" }}>
+          <div style={{
+            display: "flex",
+            flexGrow: "1",
+            flexDirection: "column",
+            justifyContent: "center",
+            padding: "5px 15px" 
+          }}>
+            <div>
+              <input 
+                disabled={loading}
+                onChange={(e: any) => setRepoName(e.target.value)}
+                style={{ padding: "5px", width: "100%", border: ".5px solid grey", borderRadius: "2px" }}
+                type="text"/>
+            </div>
+          </div>
+          <div style={{
+            display: "flex",
+            justifyContent: "center",
+            padding: "5px 15px",
+          }}>
+            { !loading ? 
+              <button
+                style={{
+                  display: "inline-flex",
+                  position: "relative",
+                  background: repoName ? "#0091FF" : "#f3f3f2",
+                  color: repoName ? "white" : "black",
+                  width: "auto",
+                  cursor: "pointer",
+                  borderRadius: "6px",
+                  padding: "8px",
+                  borderWidth: "0px",
+                }}
+                disabled={!repoName}
+                onClick={ () => handleCreateRepo() }>Create</button>
+                : <div>Loading...</div>
+              }
+          </div>
+        </div>
+        { 
+          repoExists && 
+          <div style={{ padding: "12px", width: "100%" }}>
+            <ul style={{ marginTop: "5px", backgroundColor: "#fef08a", padding: "8px" }}>
+              <li>{repoExists}</li>
+            </ul>
+          </div>  
+        }
+      </div>
+      : <PlasmicSubsectionPushDeploy
         {...rest}
         checkbox={{
           props: {
@@ -325,6 +446,7 @@ function SubsectionPushDeploy(props: SubsectionPushDeployProps) {
         }}
         result={mkPushDeployPublishState(status)}
       />
+    }
 
       {connectedToGithub && (
         <TopBarModal onClose={() => setConnectedToGithub(false)}>
