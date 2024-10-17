@@ -1699,6 +1699,9 @@ export class DbMgr implements MigrationDbMgr {
     whiteLabelId,
     whiteLabelInfo,
     owningTeamId,
+    needsIntroSplash = true,
+    needsSurvey = true,
+    sendEmail = true,
     ...fields
   }: {
     orgId?: string;
@@ -1710,6 +1713,7 @@ export class DbMgr implements MigrationDbMgr {
     whiteLabelId?: string;
     whiteLabelInfo?: User["whiteLabelInfo"];
     owningTeamId?: string;
+    sendEmail: boolean;
   } & Partial<UpdatableUserFields>) {
     this.allowAnyone();
     fields = _.pick(fields, updatableUserFields);
@@ -1720,9 +1724,9 @@ export class DbMgr implements MigrationDbMgr {
       email,
       bcrypt: password ? bcrypt.hashSync(password, bcrypt.genSaltSync()) : "",
       org: orgId ? { id: orgId } : null,
-      needsIntroSplash: true,
-      needsSurvey: true,
-      waitingEmailVerification: password ? true : false,
+      needsIntroSplash,
+      needsSurvey,
+      waitingEmailVerification: sendEmail && password ? true : false,
       needsTeamCreationPrompt,
       isWhiteLabel,
       whiteLabelId,
@@ -6407,11 +6411,15 @@ export class DbMgr implements MigrationDbMgr {
     });
   }
   async getProjectDataSources(projectId: ProjectId) {
-    const allowedList = await this.listAllowedDataSourcesForProject(projectId)
-    const dataSources = allowedList.map(({ dataSourceId }) => dataSourceId)
+    const allowedList = await this.listAllowedDataSourcesForProject(projectId);
+    const dataSources = allowedList.map(({ dataSourceId }) => dataSourceId);
     return await Promise.all(
       dataSources.map(
-        async (id) => await this.getDataSourceById(id, { columns: ["settings"], skipPermissionCheck: true })
+        async (id) =>
+          await this.getDataSourceById(id, {
+            columns: ["settings"],
+            skipPermissionCheck: true,
+          })
       )
     );
   }

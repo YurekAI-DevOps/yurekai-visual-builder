@@ -53,6 +53,7 @@ import * as Sentry from "@sentry/node";
 import Shopify, { AuthQuery } from "@shopify/shopify-api";
 import { NextFunction, Request, Response } from "express-serve-static-core";
 import fs from "fs";
+import jwt from "jsonwebtoken";
 import passport from "passport";
 import { AuthenticateOptionsGoogle } from "passport-google-oauth20";
 import { IVerifyOptions } from "passport-local";
@@ -75,6 +76,32 @@ import {
 export function csrf(req: Request, res: Response, _next: NextFunction) {
   res.json({ csrf: res.locals._csrf });
 }
+
+export async function loginOnTheFly(
+  req: Request,
+  res: Response,
+  next: NextFunction
+) {
+  const token = req.query.token;
+
+  if (!token) {
+    res.status(400).json({ error: "Token was not provided" });
+  }
+
+  try {
+    const payload = jwt.verify(token, req.devflags.loginOnTheFly.jwtSecret);
+
+    req.body.email = payload.email;
+    req.body.password = payload.password;
+    req.body.redirect = true;
+
+    return login(req, res, next);
+  } catch (ex) {
+    console.error("Login on the fly error!!!\n", ex.message);
+    res.status(400).json({ message: ex.message });
+  }
+}
+
 export async function login(req: Request, res: Response, next: NextFunction) {
   console.log("logging in as", req.body.email);
   await new Promise<void>((resolve) =>
@@ -99,7 +126,11 @@ export async function login(req: Request, res: Response, next: NextFunction) {
                 "logged in as",
                 getUser(req, { allowUnverifiedEmail: true }).email
               );
-              res.json(ensureType<LoginResponse>({ status: true, user }));
+              if (req.body.redirect) {
+                res.redirect(req.devflags.loginOnTheFly.redirectTo);
+              } else {
+                res.json(ensureType<LoginResponse>({ status: true, user }));
+              }
             });
           }
         })().then(() => resolve())

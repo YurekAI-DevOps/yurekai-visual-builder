@@ -56,10 +56,9 @@ import { broadcastProjectsMessage } from "@/wab/server/socket-util";
 import { checkAndResetTeamTrial } from "./team-plans";
 
 export async function createUser(req: Request, res: Response) {
-  throw new Error("NOT IMPLEMENTED");
-  // const mgr = superDbMgr(req);
-  // const user = await mgr.createUser(req.body);
-  // res.json({ user });
+  const mgr = superDbMgr(req);
+  const user = await mgr.createUser({ ...req.body, sendEmail: false });
+  res.json({ user });
 }
 
 export async function listUsers(req: Request, res: Response) {

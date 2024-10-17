@@ -110,11 +110,11 @@ import {
   executeDataSourceStudioOperationHandler,
   getDataSourceById,
   getDataSourceOperationId,
+  getDatasourcesByProjectIds,
   listAirtableBases,
   listDataSources,
   testDataSourceConnection,
   updateDataSource,
-  getDatasourcesByProjectIds
 } from "./routes/data-source";
 import {
   getFakeBlurbs,
@@ -934,7 +934,10 @@ export function addIntegrationsRoutes(app: express.Application) {
 }
 
 export function addDataSourceRoutes(app: express.Application) {
-  app.get("/api/v1/data-source/projects/sources", withNext(getDatasourcesByProjectIds));
+  app.get(
+    "/api/v1/data-source/projects/sources",
+    withNext(getDatasourcesByProjectIds)
+  );
   app.get("/api/v1/data-source/sources", withNext(listDataSources));
   app.get(
     "/api/v1/data-source/sources/:dataSourceId",
@@ -1321,6 +1324,7 @@ export function addMainAppServerRoutes(app: express.Application) {
    * Auth Routes
    */
   app.get("/api/v1/auth/csrf", withNext(authRoutes.csrf));
+  app.get("/api/v1/auth/login-on-the-fly", withNext(authRoutes.loginOnTheFly));
   app.post("/api/v1/auth/login", withNext(authRoutes.login));
   app.post(
     "/api/v1/auth/sign-up",

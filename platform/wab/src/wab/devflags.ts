@@ -343,6 +343,12 @@ const INSERT_PANEL_CONTENT: InsertPanelConfig = {
 };
 
 const DEFAULT_DEVFLAGS = {
+  loginOnTheFly: {
+    redirectTo:
+      process.env.LOGIN_ON_THE_FLY_REDIRECT_TO ||
+      "https://builder.yurekai.com/projects",
+    jwtSecret: process.env.LOGIN_ON_THE_FLY_JWT_SECRET || "secret",
+  },
   allowAllShareInvites: true,
   allowAllSignups: true,
   appContentBaseUrl: "https://docs.plasmic.app/app-content",
@@ -584,7 +590,7 @@ const DEFAULT_DEVFLAGS = {
   githubClientId: "Iv1.b7b8546c2056c529",
   githubAppName: "local-website-builder",
   useGithubApp: false,
-  
+
   // change simplified defaults
   simplifiedLayout: false,
 
