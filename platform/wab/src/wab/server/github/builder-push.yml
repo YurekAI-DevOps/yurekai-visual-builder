@@ -1,4 +1,3 @@
-# Plasmic push workflow v2
 name: Build and deploy Builder YurekAI app
 
 on:
@@ -17,23 +16,33 @@ jobs:
         with:
           persist-credentials: false
           fetch-depth: 0
+
       - id: node
         name: Set up node v18
         uses: actions/setup-node@v3
         with:
           node-version: "18"
+
       - id: cache
         name: Recover cache
         uses: actions/cache@v2
         with:
           key: lock-${{ hashFiles('package-lock.json', 'yarn.lock') }}
           path: node_modules
-      - id: next-base-path
-        name: Add basePath to next configuration file
+
+      - id: check-next-config
+        name: Check and update next.config.js
         run: |
-          REPO=${{ github.repository }} \
-          REPO_NAME_ONLY=$(echo $REPO | cut -d'/' -f2) && \
-          sed -i.bak s,YOUR_REPO_NAME,/${REPO_NAME_ONLY},g ./next.config.js
+          REPO=${{ github.repository }}
+          REPO_NAME_ONLY=$(echo $REPO | cut -d'/' -f2)
+          
+          if [ -f ./next.config.js ]; then
+            sed -i.bak "s,YOUR_REPO_NAME,/${REPO_NAME_ONLY},g" ./next.config.js
+            echo "Updated next.config.js with repository name."
+          else
+            echo "next.config.js does not exist. Skipping update."
+          fi
+
       - id: build
         name: Build Builder YurekAI app
         uses: plasmicapp/plasmic-action@master
@@ -41,6 +50,7 @@ jobs:
           run: build
           branch: main
           skip_if_plasmic: true
+
       - id: gh-pages
         name: Publish to GitHub Pages
         uses: JamesIves/github-pages-deploy-action@4.1.0
