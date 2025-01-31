@@ -90,7 +90,7 @@ export function EmailVerification(props: EmailVerificationProps) {
               <h2>Thanks for verifying your email</h2>
               <p>
                 Now we know it's you, you can start getting the best out of
-                YurakAI.
+                YurekAI.
               </p>
               <Button
                 type={"primary"}

@@ -343,6 +343,7 @@ const INSERT_PANEL_CONTENT: InsertPanelConfig = {
 };
 
 const DEFAULT_DEVFLAGS = {
+  mailHost: "https://builder.yurekai.com",
   loginOnTheFly: {
     redirectTo:
       process.env.LOGIN_ON_THE_FLY_REDIRECT_TO ||

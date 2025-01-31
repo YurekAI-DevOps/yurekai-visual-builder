@@ -68,7 +68,7 @@ function generateEmailVerificationLink(
   token: string,
   nextPath?: string
 ) {
-  return `${host}/email-verification?token=${encodeURIComponent(token)}${
+  return `${req.devflags.mailHost ?? host}/email-verification?token=${encodeURIComponent(token)}${
     nextPath ? `&continueTo=${encodeURIComponent(nextPath)}` : ""
   }`;
 }
@@ -115,7 +115,7 @@ export async function sendInviteApprovalAdminEmail(
     }"`,
     text: `Go to the admin panel to whitelist this user or domain:
 
-${req.config.host}/admin
+${req.devflags.mailHost ?? req.config.host}/admin
 
 Then we'll send out any queued share emails to the associated user(s).
     `,
@@ -196,7 +196,7 @@ export async function sendResetPasswordEmail(
 
   const resetPasswordLink = appInfo
     ? `${appInfo.nextPath}&mode=reset+password&${resetPasswordFields}`
-    : `${req.config.host}/reset-password?${resetPasswordFields}`;
+    : `${req.devflags.mailHost ?? req.config.host}/reset-password?${resetPasswordFields}`;
 
   await req.mailer.sendMail({
     from: req.config.mailFrom,
@@ -225,7 +225,7 @@ export async function sendBlockedSignupAdminEmail(
 
 You can go to the admin panel to "Invite & Whitelist" this user:
 
-${req.config.host}/admin
+${req.devflags.mailHost ?? req.config.host}/admin
 `,
   });
 }
@@ -253,7 +253,7 @@ export async function sendEmailVerificationToUser(
   // in the app authorization page instead of the general email verification page.
   const emailVerificationLink = appName
     ? `${nextPath}&token=${encodeURIComponent(token)}&mode=email+verification`
-    : generateEmailVerificationLink(req.config.host, token, nextPath);
+    : generateEmailVerificationLink((req.devflags.mailHost ?? req.config.host), token, nextPath);
 
   await req.mailer.sendMail({
     from: req.config.mailFrom,
