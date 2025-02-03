@@ -1667,7 +1667,7 @@ export async function changeProjectPermissions(req: Request, res: Response) {
         email,
         "project",
         project.name,
-        createProjectUrl(req.devflags.mailHost ?? req.config.host, project.id),
+        createProjectUrl((req.devflags.mailHost ?? req.config.host), project.id),
         !!(await mgr.tryGetUserByEmail(email))
       );
     } else {

@@ -219,7 +219,7 @@ export async function changeResourcePermissions(req: Request, res: Response) {
   const { grants, revokes, requireSignUp } = uncheckedCast<GrantRevokeRequest>(
     req.body
   );
-  const host = req.config.host;
+  const host = req.devflags.mailHost ?? req.config.host;
   const resourcesById: Record<string, Team | Workspace | Project> = {};
   const emailsToSend: {
     email: string;

@@ -204,7 +204,7 @@ export async function addToWhitelist(req: Request, res: Response) {
       approvedRequest.inviteeEmail,
       "project",
       project.name,
-      createProjectUrl(req.devflags.mailHost ?? req.config.host, project.id),
+      createProjectUrl((req.devflags.mailHost ?? req.config.host), project.id),
       !!(await mgr.tryGetUserByEmail(approvedRequest.inviteeEmail))
     );
   }
