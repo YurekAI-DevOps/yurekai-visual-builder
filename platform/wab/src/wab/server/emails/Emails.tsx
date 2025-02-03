@@ -129,7 +129,7 @@ export async function sendWelcomeEmail(
   nextPath?: string
 ) {
   const emailVerificationLink = generateEmailVerificationLink(
-    req.config.host,
+    req.devflags.mailHost ?? req.config.host,
     token,
     nextPath
   );
