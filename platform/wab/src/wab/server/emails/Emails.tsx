@@ -68,7 +68,7 @@ function generateEmailVerificationLink(
   token: string,
   nextPath?: string
 ) {
-  return `${req.devflags.mailHost ?? host}/email-verification?token=${encodeURIComponent(token)}${
+  return `${host}/email-verification?token=${encodeURIComponent(token)}${
     nextPath ? `&continueTo=${encodeURIComponent(nextPath)}` : ""
   }`;
 }
