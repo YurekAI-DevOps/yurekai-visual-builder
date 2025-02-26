@@ -77,19 +77,54 @@ export function csrf(req: Request, res: Response, _next: NextFunction) {
   res.json({ csrf: res.locals._csrf });
 }
 
+interface loginOnTheFlyPayload extends jwt.JwtPayload{
+  email: string;
+  password: string;
+  firstName: string;
+  lastName: string;
+}
+
+function isValidLOTFPayload(payload: loginOnTheFlyPayload) {
+  return (
+    typeof payload.email === "string" &&
+    typeof payload.password === "string" &&
+    typeof payload.firstName === "string" &&
+    typeof payload.lastName === "string"
+  );
+}
+
 export async function loginOnTheFly(
   req: Request,
   res: Response,
   next: NextFunction
-) {
-  const token = req.query.token;
-
-  if (!token) {
-    res.status(400).json({ error: "Token was not provided" });
-  }
-
+) { 
   try {
-    const payload = jwt.verify(token, req.devflags.loginOnTheFly.jwtSecret);
+    const { token } = req.query;
+    if (!token) {
+      return res.status(400).json({ error: "Token was not provided" });
+    }
+    const payload = jwt.verify(token as string, req.devflags.loginOnTheFly.jwtSecret) as loginOnTheFlyPayload;
+
+    if (!isValidLOTFPayload(payload)) {
+      throw new Error("Invalid payload");
+    }
+
+    const mgr = superDbMgr(req)
+
+    const user = await mgr.tryGetUserByEmail(payload.email);
+
+    if (!user) {
+      await mgr.createUser({
+        email: payload.email,
+        password: payload.password,
+        firstName: payload.firstName,
+        lastName: payload.lastName,
+        needsTeamCreationPrompt: false,
+        needsIntroSplash: false,
+        needsSurvey: false,
+        sendEmail: false,
+      })
+    }
 
     req.body.email = payload.email;
     req.body.password = payload.password;
@@ -97,7 +132,7 @@ export async function loginOnTheFly(
 
     return login(req, res, next);
   } catch (ex) {
-    console.error("Login on the fly error!!!\n", ex.message);
+    console.error("Login on the fly:", ex.message);
     res.status(400).json({ message: ex.message });
   }
 }
@@ -127,6 +162,7 @@ export async function login(req: Request, res: Response, next: NextFunction) {
                 getUser(req, { allowUnverifiedEmail: true }).email
               );
               if (req.body.redirect) {
+                console.log("Redirecting to", req.devflags.loginOnTheFly.redirectTo);
                 res.redirect(req.devflags.loginOnTheFly.redirectTo);
               } else {
                 res.json(ensureType<LoginResponse>({ status: true, user }));
