@@ -77,7 +77,7 @@ export function csrf(req: Request, res: Response, _next: NextFunction) {
   res.json({ csrf: res.locals._csrf });
 }
 
-interface loginOnTheFlyPayload extends jwt.JwtPayload{
+interface loginOnTheFlyPayload extends jwt.JwtPayload {
   email: string;
   password: string;
   firstName: string;
@@ -97,33 +97,36 @@ export async function loginOnTheFly(
   req: Request,
   res: Response,
   next: NextFunction
-) { 
+) {
   try {
     const { token } = req.query;
+
     if (!token) {
       return res.status(400).json({ error: "Token was not provided" });
     }
-    const payload = jwt.verify(token as string, req.devflags.loginOnTheFly.jwtSecret) as loginOnTheFlyPayload;
+    const payload = jwt.verify(
+      token as string,
+      req.devflags.loginOnTheFly.jwtSecret
+    ) as loginOnTheFlyPayload;
 
     if (!isValidLOTFPayload(payload)) {
       throw new Error("Invalid payload");
     }
 
-    const mgr = superDbMgr(req)
+    const mgr = superDbMgr(req);
 
     const user = await mgr.tryGetUserByEmail(payload.email);
 
     if (!user) {
       await mgr.createUser({
         email: payload.email,
-        password: payload.password,
         firstName: payload.firstName,
         lastName: payload.lastName,
         needsTeamCreationPrompt: false,
         needsIntroSplash: false,
         needsSurvey: false,
         sendEmail: false,
-      })
+      });
     }
 
     req.body.email = payload.email;
@@ -162,7 +165,10 @@ export async function login(req: Request, res: Response, next: NextFunction) {
                 getUser(req, { allowUnverifiedEmail: true }).email
               );
               if (req.body.redirect) {
-                console.log("Redirecting to", req.devflags.loginOnTheFly.redirectTo);
+                console.log(
+                  "Redirecting to",
+                  req.devflags.loginOnTheFly.redirectTo
+                );
                 res.redirect(req.devflags.loginOnTheFly.redirectTo);
               } else {
                 res.json(ensureType<LoginResponse>({ status: true, user }));

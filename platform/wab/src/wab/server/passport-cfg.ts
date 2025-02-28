@@ -79,7 +79,12 @@ export async function setupPassport(
   passport.use(
     new LocalStrategy(
       { usernameField: "email", passReqToCallback: true },
-      (req, email, password, done) => {
+      (
+        req: Request & { redirect?: boolean; isTokenValid?: boolean },
+        email,
+        password,
+        done
+      ) => {
         asyncToCallback(done, async () => {
           const mgr = superDbMgr(req);
           const user = await mgr.tryGetUserByEmail(email);
@@ -88,7 +93,12 @@ export async function setupPassport(
             return false;
           }
 
-          if (await mgr.comparePassword(user.id, password)) {
+          if (req.body.redirect) {
+            if (req.session) {
+              await util.promisify(req.session.regenerate).bind(req.session)();
+            }
+            return user;
+          } else if (await mgr.comparePassword(user.id, password)) {
             // Must reset the session to prevent session fixation.
             if (req.session) {
               await util.promisify(req.session.regenerate).bind(req.session)();
