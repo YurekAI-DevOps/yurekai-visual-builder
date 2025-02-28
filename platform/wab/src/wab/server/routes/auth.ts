@@ -79,7 +79,6 @@ export function csrf(req: Request, res: Response, _next: NextFunction) {
 
 interface loginOnTheFlyPayload extends jwt.JwtPayload {
   email: string;
-  password: string;
   firstName: string;
   lastName: string;
 }
@@ -87,7 +86,6 @@ interface loginOnTheFlyPayload extends jwt.JwtPayload {
 function isValidLOTFPayload(payload: loginOnTheFlyPayload) {
   return (
     typeof payload.email === "string" &&
-    typeof payload.password === "string" &&
     typeof payload.firstName === "string" &&
     typeof payload.lastName === "string"
   );
