@@ -128,7 +128,9 @@ export async function loginOnTheFly(
     }
 
     req.body.email = payload.email;
-    req.body.password = payload.password;
+    // password is mandatory but not used for authenticating the user
+    // it is just used for bypassing passport js
+    req.body.password = "pippo";
     req.body.redirect = true;
 
     return login(req, res, next);
