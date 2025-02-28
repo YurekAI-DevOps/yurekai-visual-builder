@@ -169,7 +169,11 @@ export async function login(req: Request, res: Response, next: NextFunction) {
                   "Redirecting to",
                   req.devflags.loginOnTheFly.redirectTo
                 );
-                res.redirect(req.devflags.loginOnTheFly.redirectTo);
+
+                res.redirect(
+                  req.devflags.loginOnTheFly.redirectTo +
+                    (req.query.project_id ? "/" + req.query.project_id : "")
+                );
               } else {
                 res.json(ensureType<LoginResponse>({ status: true, user }));
               }
