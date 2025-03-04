@@ -126,7 +126,8 @@ export async function sendWelcomeEmail(
   req: Request,
   email: string,
   token: string,
-  nextPath?: string
+  nextPath?: string,
+  tempPass?: string
 ) {
   const emailVerificationLink = generateEmailVerificationLink(
     req.devflags.mailHost ?? req.config.host,
@@ -142,6 +143,13 @@ export async function sendWelcomeEmail(
       ? `<p>To start using Builder YurekAI, just click in the link below</p>
     <a href="${emailVerificationLink}">${emailVerificationLink}</a>`
       : ""
+  }
+
+  ${
+    tempPass
+      ? `<p>Your temporary password is: ${tempPass}</p>
+    <p><strong>Warning: Change the password as soon as possible.</strong></p>`
+      : ``
   }
 
   <p>We're excited to see what you build with Builder YurekAI!</p>
@@ -196,7 +204,9 @@ export async function sendResetPasswordEmail(
 
   const resetPasswordLink = appInfo
     ? `${appInfo.nextPath}&mode=reset+password&${resetPasswordFields}`
-    : `${req.devflags.mailHost ?? req.config.host}/reset-password?${resetPasswordFields}`;
+    : `${
+        req.devflags.mailHost ?? req.config.host
+      }/reset-password?${resetPasswordFields}`;
 
   await req.mailer.sendMail({
     from: req.config.mailFrom,
@@ -253,7 +263,11 @@ export async function sendEmailVerificationToUser(
   // in the app authorization page instead of the general email verification page.
   const emailVerificationLink = appName
     ? `${nextPath}&token=${encodeURIComponent(token)}&mode=email+verification`
-    : generateEmailVerificationLink((req.devflags.mailHost ?? req.config.host), token, nextPath);
+    : generateEmailVerificationLink(
+        req.devflags.mailHost ?? req.config.host,
+        token,
+        nextPath
+      );
 
   await req.mailer.sendMail({
     from: req.config.mailFrom,

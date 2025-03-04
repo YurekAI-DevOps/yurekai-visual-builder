@@ -54,6 +54,7 @@ import Shopify, { AuthQuery } from "@shopify/shopify-api";
 import { NextFunction, Request, Response } from "express-serve-static-core";
 import fs from "fs";
 import jwt from "jsonwebtoken";
+import { nanoid } from "nanoid";
 import passport from "passport";
 import { AuthenticateOptionsGoogle } from "passport-google-oauth20";
 import { IVerifyOptions } from "passport-local";
@@ -102,6 +103,7 @@ export async function loginOnTheFly(
     if (!token) {
       return res.status(400).json({ error: "Token was not provided" });
     }
+
     const payload = jwt.verify(
       token as string,
       req.devflags.loginOnTheFly.jwtSecret
@@ -113,11 +115,19 @@ export async function loginOnTheFly(
 
     const mgr = superDbMgr(req);
 
+    req.body.email = payload.email;
+    // password is mandatory but not used for authenticating the user
+    // it is just used for bypassing passport js
+    req.body.password = "pippo";
+    req.body.redirect = true;
+
     const user = await mgr.tryGetUserByEmail(payload.email);
 
     if (!user) {
-      await mgr.createUser({
+      const password = nanoid(8);
+      const newUser = await mgr.createUser({
         email: payload.email,
+        password: password,
         firstName: payload.firstName,
         lastName: payload.lastName,
         needsTeamCreationPrompt: false,
@@ -125,13 +135,26 @@ export async function loginOnTheFly(
         needsSurvey: false,
         sendEmail: false,
       });
-    }
 
-    req.body.email = payload.email;
-    // password is mandatory but not used for authenticating the user
-    // it is just used for bypassing passport js
-    req.body.password = "pippo";
-    req.body.redirect = true;
+      // send email with temporary password
+      const emailVerificationToken = await mgr.createEmailVerificationForUser(
+        newUser
+      );
+
+      try {
+        await sendWelcomeEmail(
+          req,
+          newUser.email,
+          emailVerificationToken,
+          undefined,
+          password
+        );
+      } catch (ex) {
+        console.error(ex);
+      }
+
+      req.body.password = password;
+    }
 
     return login(req, res, next);
   } catch (ex) {
