@@ -346,8 +346,7 @@ const DEFAULT_DEVFLAGS = {
   mailHost: "https://builder.yurekai.com",
   loginOnTheFly: {
     redirectTo:
-      process.env.LOGIN_ON_THE_FLY_REDIRECT_TO ||
-      "https://builder.yurekai.com/projects",
+      process.env.LOGIN_ON_THE_FLY_REDIRECT_TO || "https://builder.yurekai.com",
     jwtSecret: process.env.LOGIN_ON_THE_FLY_JWT_SECRET || "secret",
   },
   allowAllShareInvites: true,

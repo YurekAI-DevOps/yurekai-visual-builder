@@ -119,7 +119,8 @@ export async function loginOnTheFly(
     // password is mandatory but not used for authenticating the user
     // it is just used for bypassing passport js
     req.body.password = "pippo";
-    req.body.redirect = true;
+    req.body.redirect =
+      "/projects" + (req.query.project_id ? `/${req.query.project_id}` : "");
 
     const user = await mgr.tryGetUserByEmail(payload.email);
 
@@ -133,7 +134,7 @@ export async function loginOnTheFly(
         needsTeamCreationPrompt: false,
         needsIntroSplash: false,
         needsSurvey: false,
-        sendEmail: false,
+        sendEmail: true,
       });
 
       // send email with temporary password
@@ -141,19 +142,16 @@ export async function loginOnTheFly(
         newUser
       );
 
-      try {
-        await sendWelcomeEmail(
-          req,
-          newUser.email,
-          emailVerificationToken,
-          undefined,
-          password
-        );
-      } catch (ex) {
-        console.error(ex);
-      }
+      sendWelcomeEmail(
+        req,
+        newUser.email,
+        emailVerificationToken,
+        undefined,
+        password
+      ).catch(console.error);
 
       req.body.password = password;
+      req.body.redirect = "/email-verification";
     }
 
     return login(req, res, next);
@@ -188,15 +186,12 @@ export async function login(req: Request, res: Response, next: NextFunction) {
                 getUser(req, { allowUnverifiedEmail: true }).email
               );
               if (req.body.redirect) {
-                console.log(
-                  "Redirecting to",
-                  req.devflags.loginOnTheFly.redirectTo
-                );
+                const url =
+                  req.devflags.loginOnTheFly.redirectTo + req.body.redirect;
 
-                res.redirect(
-                  req.devflags.loginOnTheFly.redirectTo +
-                    (req.query.project_id ? "/" + req.query.project_id : "")
-                );
+                console.log("Redirecting to", url);
+
+                res.redirect(url);
               } else {
                 res.json(ensureType<LoginResponse>({ status: true, user }));
               }
