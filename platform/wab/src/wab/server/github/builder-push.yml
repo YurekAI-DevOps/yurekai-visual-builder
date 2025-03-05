@@ -25,7 +25,7 @@ jobs:
 
       - id: cache
         name: Recover cache
-        uses: actions/cache@v2
+        uses: actions/cache@v4
         with:
           key: lock-${{ hashFiles('package-lock.json', 'yarn.lock') }}
           path: node_modules
@@ -35,7 +35,7 @@ jobs:
         run: |
           REPO=${{ github.repository }}
           REPO_NAME_ONLY=$(echo $REPO | cut -d'/' -f2)
-          
+
           if [ -f ./next.config.js ]; then
             sed -i.bak "s,YOUR_REPO_NAME,/${REPO_NAME_ONLY},g" ./next.config.js
             echo "Updated next.config.js with repository name."
