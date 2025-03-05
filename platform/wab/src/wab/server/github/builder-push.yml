@@ -45,7 +45,7 @@ jobs:
 
       - id: build
         name: Build Builder YurekAI app
-        uses: plasmicapp/plasmic-action@master
+        uses: iwhdevops/yurekai-builder-action@yurekai
         with:
           run: build
           branch: main
