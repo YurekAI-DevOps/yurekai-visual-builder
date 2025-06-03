@@ -99,7 +99,7 @@ export function ConnectOAuthButton(props: ConnectOAuthButtonProps) {
 
   const { appConfig: { useGithubApp } } = appCtx;
 
-  const onClick = () => open(props.url, !useGithubApp);
+  const onClick = () => open(props.url);
 
   if (props.render) {
     return props.render({ onClick, isWaiting });
