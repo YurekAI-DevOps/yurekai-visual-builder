@@ -73,6 +73,7 @@ import {
   userAnalytics,
   userDbMgr,
 } from "./util";
+import { createTaggedResourceId } from "@/wab/shared/perms";
 
 export function csrf(req: Request, res: Response, _next: NextFunction) {
   res.json({ csrf: res.locals._csrf });
@@ -136,6 +137,17 @@ export async function loginOnTheFly(
         needsSurvey: false,
         sendEmail: true,
       });
+
+      // Give permission to workspace
+      if (payload.workspaceId) {
+        const taggedResourceId = createTaggedResourceId("workspace", payload.workspaceId);
+        await mgr.grantResourcePermissionByEmail(
+          taggedResourceId,
+          payload.email,
+          "editor",
+          true
+        )
+      }
 
       // send email with temporary password
       const emailVerificationToken = await mgr.createEmailVerificationForUser(
