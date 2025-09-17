@@ -83,6 +83,7 @@ interface loginOnTheFlyPayload extends jwt.JwtPayload {
   email: string;
   firstName: string;
   lastName: string;
+  workspaceId?: string | null;
 }
 
 function isValidLOTFPayload(payload: loginOnTheFlyPayload) {
